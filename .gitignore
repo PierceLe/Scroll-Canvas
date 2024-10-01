@@ -1,0 +1,8 @@
+/Users/piercele/Desktop/year-2/sem1/soft2412/Vinit_Lab15_Group03_A2/app /Users/piercele/Desktop/year-2/sem1/soft2412/Vinit_Lab15_Group03_A2/Dockerfile /Users/piercele/Desktop/year-2/sem1/soft2412/Vinit_Lab15_Group03_A2/gradle /Users/piercele/Desktop/year-2/sem1/soft2412/Vinit_Lab15_Group03_A2/gradlew /Users/piercele/Desktop/year-2/sem1/soft2412/Vinit_Lab15_Group03_A2/gradlew.bat /Users/piercele/Desktop/year-2/sem1/soft2412/Vinit_Lab15_Group03_A2/settings.gradle# Ignore Gradle project-specific cache directory
+.gradle
+gradlew
+gradlew.bat
+app/build
+# Ignore Gradle build output directory
+build
+
