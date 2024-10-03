@@ -5,6 +5,7 @@ services:
     ports:
       - "3306:3306"
     image: mysql:8.0
+    #    container_name: db_scroll_system
     environment:
       MYSQL_DATABASE: scroll_system
       MYSQL_USER: dev
