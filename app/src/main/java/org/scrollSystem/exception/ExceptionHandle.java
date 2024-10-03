@@ -1,7 +1,7 @@
-package org.example.exception;
+package org.scrollSystem.exception;
 
-import org.example.exception.ValidationException;
-import org.example.response.DefaultResponse;
+import org.scrollSystem.exception.ValidationException;
+import org.scrollSystem.response.DefaultResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.HttpStatus;
