@@ -5,4 +5,7 @@ gradlew.bat
 app/build
 # Ignore Gradle build output directory
 build
+.DS_Store
+.idea/
+app/.DS_Store
 
