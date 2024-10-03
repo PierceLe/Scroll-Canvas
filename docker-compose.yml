@@ -4,10 +4,10 @@ services:
     image: mysql:8.0
     container_name: mysql-container2
     environment:
-      MYSQL_DATABASE: scroll_system
-      MYSQL_USER: dev
-      MYSQL_PASSWORD: high_distinction
-      MYSQL_ROOT_PASSWORD: vinit_lab15_group3
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
@@ -19,7 +19,6 @@ services:
     image: java_scroll_system
     container_name: java_scroll_system2
     build:
-      context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
