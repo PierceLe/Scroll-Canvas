@@ -1,19 +1,25 @@
 version: '3.5'
 
 services:
-  mysql:
+  db:
+    ports:
+      - "3306:3306"
     image: mysql:8.0
-    container_name: mysql_scroll_system
+#    container_name: db_scroll_system
     environment:
       MYSQL_DATABASE: scroll_system
       MYSQL_USER: dev
       MYSQL_PASSWORD: high_distinction
+      MYSQL_ROOT_PASSWORD: vinit_lab15_group3
+    expose:
+      - "3306"
+
     networks:
       - network-scroll-system
     volumes:
       - mysql_scroll_system:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -27,8 +33,9 @@ services:
     networks:
       - network-scroll-system
     depends_on:
-      - mysql
-    restart: unless-stopped
+      - db
+    restart: no
+
 
 volumes:
   mysql_scroll_system:

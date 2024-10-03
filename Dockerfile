@@ -4,4 +4,4 @@ WORKDIR /app
 COPY . .
 RUN gradle build
 EXPOSE 8080
-CMD gradle clean test && gradle run
+CMD gradle run
