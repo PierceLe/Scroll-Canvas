@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
     private String firstname;
     private String lastname;
-    @NotNull(message = "email ko được để trống")
-    @NotBlank(message = "email ko được để trống")
+    @NotNull(message = "email can not be empty")
+    @NotBlank(message = "email can not be empty")
     private String email;
-    @NotNull(message = "Mật khẩu không được để trống")
-    @NotBlank(message = "Mật khẩu không được để trống")
+    @NotNull(message = "password can not be empty")
+    @NotBlank(message = "password can not be empty")
     private String password;
 }
