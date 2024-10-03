@@ -14,7 +14,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'org.excample'
+group = 'org.scrollSystem'
 version = '0.0.1-SNAPSHOT'
 
 repositories {
@@ -61,7 +61,7 @@ configurations {
 
 application {
     // Define the main class for the application.
-    mainClass = 'org.example.App'
+    mainClass = 'org.scrollSystem.App'
 }
 
 tasks.named('test') {
