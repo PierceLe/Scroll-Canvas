@@ -28,7 +28,7 @@ public class ExceptionHandle {
 
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
     public ResponseEntity<DefaultResponse<Object>> exception(MissingServletRequestParameterException exception) {
-        return DefaultResponse.error("Không được để trống param " + exception.getParameterName());
+        return DefaultResponse.error("can not make empty param " + exception.getParameterName());
     }
 
     @ExceptionHandler(value = Exception.class)
