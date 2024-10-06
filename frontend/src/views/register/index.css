@@ -1,0 +1,143 @@
+/* Container for dark and light modes */
+.light-mode {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.dark-mode {
+    background-color: #2e2e2e;
+    color: #fff;
+}
+
+/* Notes container */
+.notes-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.notes-textarea {
+    width: 300px;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+    background-color: transparent;
+    color: inherit;
+}
+
+.download-btn {
+    font-size: 2rem;
+    color: #007bff;
+    background: none;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.download-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Form container */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-box {
+    width: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: inherit;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: inherit;
+}
+
+.form-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.dark-mode-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.icon {
+    font-size: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.error-text {
+    color: #ff4d4f;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.light-submit-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.light-submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.dark-submit-btn {
+    background-color: #1a73e8;
+    color: white;
+}
+
+.dark-submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Existing user message */
+.existing-user-msg {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.login-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+.error-text {
+    color: #ff4d4f;
+    font-size: 12px;
+    margin-top: 5px;
+}
