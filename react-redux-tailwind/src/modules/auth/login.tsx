@@ -34,7 +34,7 @@ export const Login = () => {
   };
 
   const handleSignUp = () => {
-    navigate(PAGE_LINKS.SIGNUP.path);
+    navigate(PAGE_LINKS.REGISTER.path);
   };
 
   return (

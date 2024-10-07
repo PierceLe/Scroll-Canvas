@@ -8,4 +8,4 @@ export type ButtonProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>
 };
 
-export type ButtonVariant = 'contained' | 'outlined'
+export type ButtonVariant = 'contained' | 'outlined' | 'text'

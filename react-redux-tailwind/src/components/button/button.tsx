@@ -1,4 +1,4 @@
-import classnames, { backgroundColor, borderRadius, borders, spacing, typography } from '@frontend/tailwindcss-classnames';
+import classnames, { backgroundColor, borderRadius, borders, sizing, spacing, typography } from '@frontend/tailwindcss-classnames';
 import { ButtonProps, ButtonVariant } from './types';
 
 export const Button = (props: ButtonProps) => {
@@ -7,7 +7,7 @@ export const Button = (props: ButtonProps) => {
   const styles = useStyles();
 
   return (
-    <button className={classnames(classNames, styles.common, styles.variant(variant))} onClick={onClick}>
+    <button className={classnames(classNames, styles.common, styles.variant(variant), styles.size(size, variant))} onClick={onClick}>
       {children}
     </button>
   );
@@ -27,7 +27,16 @@ const useStyles = () => {
           typography('hover:text-white'),
           borders('border-2')
         ) : null,
-      )
-    
+        variant === 'text' ? classnames(
+          typography('text-primary-color', 'hover:text-secondary-color'),
+        ) : null,
+      ),
+    size: (size: 'sm' | 'md' | 'lg', variant: ButtonVariant) => classnames(
+      size === 'sm' ? classnames(
+        variant !== 'text' ? sizing('h-4') : null, 
+        typography('text-tx12')
+      ) : null,
+      size === 'md' ? classnames(sizing('h-8'), typography('text-tx12')) : null
+    )
   };
 };

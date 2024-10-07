@@ -1,4 +1,4 @@
-import classnames, { borderRadius, borders, spacing } from '@frontend/tailwindcss-classnames';
+import classnames, { borderRadius, borders, sizing, spacing, typography } from '@frontend/tailwindcss-classnames';
 import { InputProps } from './types';
 
 export const Input = (props: InputProps) => {
@@ -7,7 +7,7 @@ export const Input = (props: InputProps) => {
   const styles = useStyles();
 
   return (
-    <input className={classnames(classNames, styles.common)} placeholder={placeholder} type={type} onChange={onChange}/>
+    <input className={classnames(classNames, styles.common, styles.size(size))} placeholder={placeholder} type={type} onChange={onChange}/>
   );
 };
 
@@ -18,5 +18,9 @@ const useStyles = () => {
       spacing('p-2'),
       borders('border-2')
     ),
+    size: (size: 'sm' | 'md' | 'lg') => classnames(
+      size === 'sm' ? classnames(sizing('h-4')) : null,
+      size === 'md' ? classnames(sizing('h-8'), typography('text-tx12')) : null
+    )
   };
 };
