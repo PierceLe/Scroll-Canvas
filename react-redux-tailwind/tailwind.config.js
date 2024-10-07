@@ -44,6 +44,7 @@ module.exports = {
         tx64: ['4rem', '5rem'],
       },
       margin: {
+        '1/10-screen': '10vh',
         '1/5-screen': '20vh',
       },
     },

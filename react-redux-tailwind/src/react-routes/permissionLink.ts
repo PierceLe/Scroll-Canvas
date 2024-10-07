@@ -4,9 +4,9 @@ export const PAGE_LINKS = {
     title: 'Login',
     isWithLayout: false,
   },
-  SIGNUP: {
-    path: '/auth/signup',
-    title: 'Sign Up',
+  REGISTER: {
+    path: '/auth/register',
+    title: 'Register',
     isWithLayout: false,
   },
   NOT_FOUND: {

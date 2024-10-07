@@ -22,7 +22,7 @@ export const Routes = ({ pages }: { pages: Record<string, unknown> }) => {
   const routes = useRoutes(pages);
   const routeComponentsWithLayout: JSX.Element[] = [];
   const routeComponentsWithoutLayout: JSX.Element[] = [];
-  const routesWithoutLayout = ['/auth/login'];
+  const routesWithoutLayout = [PAGE_LINKS.LOGIN.path, PAGE_LINKS.REGISTER.path];
   console.log(routes);
   routes.forEach(({ path, component: Component }) => {
     if (routesWithoutLayout.includes(path)) {
