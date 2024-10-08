@@ -121,14 +121,14 @@ const useStyles = () => {
       display('hidden', 'group-hover:block'),
       position('absolute'),
       layout('top-12','-right-4'),
-      backgroundColor('bg-gray-200'),
+      backgroundColor('bg-gray-100'),
       borderRadius('rounded-xl'),
       sizing('w-48'),
       spacing('py-2'),
     ),
     dropdownContent: classnames(
       spacing('p-1'),
-      backgroundColor('hover:bg-gray-100')
+      backgroundColor('hover:bg-gray-50')
     ),
     logout: classnames(typography('text-red-500')),
   };
