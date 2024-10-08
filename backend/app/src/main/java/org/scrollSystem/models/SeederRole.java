@@ -22,7 +22,7 @@ public class SeederRole implements ApplicationRunner {
                 .lastName(dotenv.get("ADMIN_LAST_NAME"))
                 .email(dotenv.get("ADMIN_EMAIL"))
                 .password(passwordEncoder.encode(dotenv.get("ADMIN_PASSWORD")))
-                .username(dotenv.get("ADMIN_USERNAME"))
+                .username(dotenv.get("ADMIN_NAME"))
                 .role("admin")
                 .phone(dotenv.get("ADMIN_PHONE"))
                 .build();

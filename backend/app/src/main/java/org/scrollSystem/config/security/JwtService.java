@@ -21,10 +21,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public List<String> extractRole(String token){
-        Claims claims = extractAllClaims(token);
-        return (List<String>) claims.get("roles");
-    }
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -38,7 +35,7 @@ public class JwtService {
             Map<String, Object> extraClaims,
             User userDetails
     ) {
-        List<String> roleList = new ArrayList<>();
+        extraClaims.put("roles", userDetails.getRole());
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
