@@ -6,4 +6,5 @@ export type InputProps = {
   onChange?: React.ChangeEventHandler<HTMLInputElement>
   type?: React.HTMLInputTypeAttribute
   classNames?: TTailwindString
+  value?: string | number | readonly string[] | undefined
 };

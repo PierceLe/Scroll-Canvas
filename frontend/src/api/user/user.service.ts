@@ -19,4 +19,8 @@ export class UserService extends BaseService {
   public getUsers(options: AxiosRequestConfig<any>) {
     return this.serverCommunicate.get('/user', options);
   }
+
+  public updateUser(options: AxiosRequestConfig<any>) {
+    return this.serverCommunicate.patch('/user', options);
+  }
 }

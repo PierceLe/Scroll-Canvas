@@ -6,6 +6,8 @@ export type ButtonProps = {
   children: any
   classNames?: TTailwindString
   onClick?: React.MouseEventHandler<HTMLButtonElement>
+  disabled?: boolean
+  color?: 'primary' | 'success' | 'danger' | 'default'
 };
 
 export type ButtonVariant = 'contained' | 'outlined' | 'text'
