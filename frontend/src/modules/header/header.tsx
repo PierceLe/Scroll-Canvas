@@ -4,6 +4,7 @@ import classnames, {
   backgroundColor,
   borderRadius,
   borders,
+  boxShadow,
   cursor,
   display,
   gap,
@@ -121,13 +122,15 @@ const useStyles = () => {
       display('hidden', 'group-hover:block'),
       position('absolute'),
       layout('top-12','-right-4'),
-      backgroundColor('bg-gray-100'),
+      backgroundColor('bg-white'),
       borderRadius('rounded-xl'),
       sizing('w-48'),
       spacing('py-2'),
+      boxShadow('shadow-md'),
+      borders('border')
     ),
     dropdownContent: classnames(
-      spacing('p-1'),
+      spacing('px-4','py-2'),
       backgroundColor('hover:bg-gray-50')
     ),
     logout: classnames(typography('text-red-500')),
