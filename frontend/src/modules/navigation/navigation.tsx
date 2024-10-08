@@ -50,7 +50,7 @@ const useNavigationItemStyles = () => {
   return {
     root: classnames(
       spacing('py-2', 'px-4'),
-      typography('text-gray-600', 'text-tx18'),
+      typography('text-gray-600', 'text-tx18', 'hover:text-primary-color'),
       backgroundColor('hover:bg-gray-100'),
       borderRadius('rounded-3xl')
     ),
