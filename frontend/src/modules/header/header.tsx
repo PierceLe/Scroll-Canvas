@@ -1,31 +1,80 @@
+import { useNavigate } from 'react-router-dom';
 import classnames, {
   alignItems,
+  backgroundColor,
+  borderRadius,
   borders,
+  cursor,
   display,
   gap,
+  group,
   justifyContent,
+  layout,
+  position,
   sizing,
   spacing,
   typography,
 } from '@frontend/tailwindcss-classnames';
 import { useAuthContext } from '@frontend/modules/auth';
-import { Icon } from '@frontend/components/icon';
 import { Navigation } from '@frontend/modules/navigation';
+import { Button } from '@frontend/components/button';
+import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 
 export const Header = () => {
+  const navigate = useNavigate();
   const styles = useStyles();
-  const { user } = useAuthContext();
+  const { user, isLogged } = useAuthContext();
+
+  console.log(user, isLogged);
+
+  const handleNavigateProfilePage = () => {
+    navigate(PAGE_LINKS.PROFILE.path)
+  }
+
+  const handleNavigateUserManagementPage = () => {
+    navigate(PAGE_LINKS.USER_MANAGEMENT.path)
+  }
 
   return (
     <div className={classnames(styles.root)}>
       <div className={classnames(styles.logo)}>LOGO</div>
       <div className={styles.navigation}>
-        <Navigation/>
+        <Navigation />
       </div>
       <div className={classnames(styles.profile)}>
-        <Icon type="bell" classNames={styles.notiIcon} />
-        <div className={classnames(styles.separate)}></div>
-        <div>Profile</div>
+        {isLogged ? (
+          <>
+            <div className={classnames(styles.profileWrap)}>
+              <img
+                src="../../../public/react.png"
+                className={classnames(styles.avatar)}
+              />
+              <div className={classnames(styles.name)}>{user?.firstName}</div>
+              <div className={classnames(styles.profileDropdown)}>
+                <div className={classnames(styles.dropdownContent)} onClick={handleNavigateProfilePage}>
+                  Profile
+                </div>
+                <div className={classnames(styles.dropdownContent)} onClick={handleNavigateUserManagementPage}>
+                  User management
+                </div>
+                <div
+                  className={classnames(styles.dropdownContent, styles.logout)}
+                >
+                  Log out
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <Button variant="outlined" size="md" color="default">
+              Log in
+            </Button>
+            <Button variant="contained" size="md">
+              Sign up
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -34,9 +83,10 @@ export const Header = () => {
 const useStyles = () => {
   return {
     root: classnames(
-      sizing('h-14'),
+      sizing('h-16'),
       display('flex'),
       justifyContent('justify-between'),
+      spacing('px-10'),
     ),
     navigation: classnames(sizing('w-2/3')),
     title: classnames(typography('text-gray-6', 'font-semibold', 'text-tx20')),
@@ -55,5 +105,31 @@ const useStyles = () => {
       typography('font-bold', 'text-tx22'),
       spacing('mb-10', 'px-5'),
     ),
+    profileWrap: classnames(
+      display('flex'),
+      gap('gap-2'),
+      alignItems('items-center'),
+      cursor('cursor-pointer'),
+      borderRadius('rounded-3xl'),
+      spacing('p-2'),
+      group('group'),
+      position('relative'),
+    ),
+    name: classnames(typography('font-bold', 'text-tx18')),
+    avatar: classnames(sizing('h-8', 'w-8'), borderRadius('rounded-3xl')),
+    profileDropdown: classnames(
+      display('hidden', 'group-hover:block'),
+      position('absolute'),
+      layout('top-12','-right-4'),
+      backgroundColor('bg-gray-200'),
+      borderRadius('rounded-xl'),
+      sizing('w-48'),
+      spacing('py-2'),
+    ),
+    dropdownContent: classnames(
+      spacing('p-1'),
+      backgroundColor('hover:bg-gray-100')
+    ),
+    logout: classnames(typography('text-red-500')),
   };
 };

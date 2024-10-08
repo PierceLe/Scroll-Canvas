@@ -72,9 +72,18 @@ const useStyles = () => {
           : null,
         variant === 'outlined'
           ? classnames(
-              backgroundColor('hover:bg-primary-color'),
-              typography('hover:text-white'),
-              borders('border-2'),
+              color === 'primary'
+                ? classnames(
+                    backgroundColor('hover:bg-primary-color'),
+                    typography('hover:text-white'),
+                    borders('border-2'),
+                  )
+                : null,
+              color === 'default'
+                ? classnames(
+                    backgroundColor('hover:bg-gray-100'),
+                  )
+                : null,
             )
           : null,
         variant === 'text'
@@ -92,7 +101,10 @@ const useStyles = () => {
             )
           : null,
         size === 'md'
-          ? classnames(sizing('h-8', 'md:h-10'), typography('text-tx14', 'md:text-tx16'))
+          ? classnames(
+              sizing('h-8', 'md:h-10'),
+              typography('text-tx14', 'md:text-tx16'),
+            )
           : null,
       ),
   };
