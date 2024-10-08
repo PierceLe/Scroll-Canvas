@@ -152,7 +152,7 @@ export const Register = () => {
             <div className={classnames(styles.loginTitle)}>
               Already a member?
             </div>
-            <Button variant="text" size="sm" onClick={handleLogin}>
+            <Button variant="text" size="md" onClick={handleLogin}>
               Click here to login
             </Button>
           </div>
@@ -178,7 +178,7 @@ const useStyles = () => {
     form: classnames(spacing('mb-4')),
     inputWrap: classnames(spacing('mb-2', 'last:!mb-0')),
     input: classnames(sizing('w-full')),
-    inputLabel: classnames(spacing('mb-1'), typography('text-tx12')),
+    inputLabel: classnames(spacing('mb-1'), typography('text-tx14', 'md:text-tx16')),
 
     buttonSignUp: classnames(sizing('w-full'), spacing('mb-2')),
     loginWrap: classnames(
@@ -187,6 +187,6 @@ const useStyles = () => {
       alignItems('items-center'),
       justifyContent('justify-start'),
     ),
-    loginTitle: classnames(typography('text-tx12'), spacing('mr-1')),
+    loginTitle: classnames(typography('text-tx14', 'md:text-tx16'), spacing('mr-1')),
   };
 };
