@@ -1,5 +1,6 @@
 package org.scrollSystem.controller;
 
+
 import jakarta.validation.Valid;
 import org.scrollSystem.request.AuthenticationRequest;
 import org.scrollSystem.request.RegisterRequest;
