@@ -32,8 +32,12 @@ export const AuthProvider = (props: any) => {
     <AuthContext.Provider
       value={{
         isLoading: currentUser.isLoading,
-        isLogged: Boolean(currentUser.data?.id),
-        user: currentUser.data,
+        // isLogged: Boolean(currentUser.data?.id),
+        isLogged: true,
+        // user: currentUser.data,
+        user: {
+          firstName: "tesst"
+        },
       }}
     >
       {props.children}

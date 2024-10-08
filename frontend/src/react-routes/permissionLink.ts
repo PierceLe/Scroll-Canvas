@@ -16,7 +16,22 @@ export const PAGE_LINKS = {
   },
   HOME: {
     path: '/home',
-    title: 'Home Page',
+    title: 'Home',
+    isWithLayout: true,
+  },
+  DASHBOARD: {
+    path: '/dashboard',
+    title: 'Dashboard',
+    isWithLayout: true,
+  },
+  PROFILE: {
+    path: '/user/profile',
+    title: 'Profile',
+    isWithLayout: true,
+  },
+  USER_MANAGEMENT: {
+    path: '/user-management',
+    title: 'User Management',
     isWithLayout: true,
   },
 };
