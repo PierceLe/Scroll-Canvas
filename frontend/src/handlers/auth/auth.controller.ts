@@ -30,10 +30,10 @@ export class AuthController {
     },
   );
 
-  public login = createAsyncThunk(
+  public login = createAsyncThunk<any, any>(
     'loginAPI',
-    async (_, { rejectWithValue }) => {
-      const fetchFn = this.authService.login({});
+    async (data, { rejectWithValue }) => {
+      const fetchFn = this.authService.login({ data });
 
       try {
         const response = await fetchFn();

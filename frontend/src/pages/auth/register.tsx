@@ -8,7 +8,6 @@ const RegisterPage = () => {
   </div>;
 };
 
-// const EnhancedLogin = withAuthRoute(RegisterPage);
-const EnhancedRegisterPage = RegisterPage;
+const EnhancedRegisterPage = withAuthRoute(RegisterPage);
 
 export default EnhancedRegisterPage;

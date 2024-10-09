@@ -8,7 +8,7 @@ const LoginPage = () => {
   </div>;
 };
 
-// const EnhancedLogin = withAuthRoute(Login);
-const EnhancedLogin = LoginPage;
+const EnhancedLogin = withAuthRoute(LoginPage);
+// const EnhancedLogin = LoginPage;
 
 export default EnhancedLogin;

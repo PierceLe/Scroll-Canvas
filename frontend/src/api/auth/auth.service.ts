@@ -17,6 +17,6 @@ export class AuthService extends BaseService {
   }
 
   public login(options: AxiosRequestConfig<any>) {
-    return this.serverCommunicate.post('/v1/auth/authenticate', options);
+    return this.serverCommunicate.post('/v1/auth/login', options);
   }
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@frontend/components/button';
 import { Input } from '@frontend/components/input';
@@ -16,8 +17,10 @@ import classnames, {
 } from '@frontend/tailwindcss-classnames';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { AuthController } from '@frontend/handlers/auth';
+import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 
 export const Register = () => {
+  const navigate = useNavigate();
   const dispatch = useReduxDispatch();
   const authController = AuthController.getInstance();
 
@@ -55,19 +58,11 @@ export const Register = () => {
   };
 
   const handleLogin = () => {
-    console.log(email, password);
+    navigate(PAGE_LINKS.LOGIN.path);
   };
 
-  const handleSignUp = () => {
-    console.log({
-      email: email,
-      password: password,
-      firstName: firstName,
-      lastName: lastName,
-      phoneNumber: phoneNumber,
-      username: username
-    });
-    dispatch(authController.register({
+  const handleSignUp = async () => {
+    const data = await dispatch(authController.register({
       email,
       password,
       firstName,
@@ -75,6 +70,9 @@ export const Register = () => {
       phone: phoneNumber,
       username
     }))
+    if (data?.payload?.token) {
+      navigate(PAGE_LINKS.LOGIN.path);
+    }
   };
 
   return (

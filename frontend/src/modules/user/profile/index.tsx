@@ -14,15 +14,15 @@ import classnames, {
   justifyContent,
 } from '@frontend/tailwindcss-classnames';
 import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
-import { AuthController } from '@frontend/handlers/auth';
 import { ChangeUsernameModal } from './changeUsernameModal';
 import { ChangePasswordModal } from './changePasswordModal';
+import { UserController } from '@frontend/handlers/user';
 
 export const Profile = () => {
   const { userState } = useReduxSelector(['userState']);
   const { currentUser } = userState;
   const dispatch = useReduxDispatch();
-  const authController = AuthController.getInstance();
+  const userController = UserController.getInstance();
 
   const styles = useStyles();
   const [isChange, setIsChange] = useState<boolean>(false);
@@ -76,7 +76,7 @@ export const Profile = () => {
     }
   };
 
-  const handleSignUp = () => {
+  const handleUpdateProfile = () => {
     console.log({
       email: email,
       firstName: firstName,
@@ -85,7 +85,8 @@ export const Profile = () => {
       username: username,
     });
     dispatch(
-      authController.register({
+      userController.updateUser({
+        id: currentUser.data?.id,
         email,
         firstName,
         lastName,
@@ -150,7 +151,7 @@ export const Profile = () => {
         variant="contained"
         size="lg"
         classNames={classnames(styles.buttonSignUp)}
-        onClick={handleSignUp}
+        onClick={handleUpdateProfile}
         disabled={!isChange}
         color="success"
       >

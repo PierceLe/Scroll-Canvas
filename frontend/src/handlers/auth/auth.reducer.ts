@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AuthController } from './auth.controller';
 import { AuthState } from './types';
-import { User } from '@frontend/repositories';
+import { clearCookie, setCookie } from '@frontend/helpers/cookie';
 
 const authController = AuthController.getInstance();
 
@@ -12,7 +12,16 @@ const initialState: AuthState = {
 export const authSlice = createSlice({
   name: 'authSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      clearCookie('Authentication');
+      window.location.reload();
+
+      return {
+        ...state,
+      };
+    },
+  },
   extraReducers: builder => {
     // RegisterAPI
     builder.addCase(authController.register.pending, state => {
@@ -20,13 +29,13 @@ export const authSlice = createSlice({
     });
     builder.addCase(
       authController.register.fulfilled,
-      (state, action): AuthState => {
+      (state): AuthState => {
         return {
           ...state,
           currentUser: {
             ...state.currentUser,
             isLoading: false,
-            data: User.buildUser(action.payload),
+            // data: User.buildUser(action.payload),
           },
         };
       },
@@ -48,6 +57,9 @@ export const authSlice = createSlice({
     builder.addCase(
       authController.login.fulfilled,
       (state, action): AuthState => {
+        const token = action.payload.token;
+        setCookie('Authentication', token);
+        
         return {
           ...state,
         };
@@ -66,5 +78,5 @@ export const authSlice = createSlice({
 });
 
 // eslint-disable-next-line no-empty-pattern
-export const {} = authSlice.actions;
+export const { logout } = authSlice.actions;
 export const { reducer: authReducer } = authSlice;

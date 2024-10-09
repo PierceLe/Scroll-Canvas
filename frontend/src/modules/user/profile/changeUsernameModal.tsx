@@ -10,13 +10,33 @@ import {
   spacing,
 } from '@frontend/tailwindcss-classnames';
 import { Button } from '@frontend/components/button';
+import { UserController } from '@frontend/handlers/user';
+import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
 
 export const ChangeUsernameModal = () => {
+  const dispatch = useReduxDispatch();
+  const userController = UserController.getInstance();
+  const { userState } = useReduxSelector(['userState']);
+  const { currentUser } = userState;
   const [username, setUsername] = useState<string>();
+  const [isChange, setIsChange] = useState<boolean>(false);
   const styles = useStyles();
 
   const handleUsername = (e: any) => {
     setUsername(e.target.value);
+
+    if (!isChange) {
+      setIsChange(true);
+    }
+  };
+
+  const handleUpdateUsername = () => {
+    dispatch(
+      userController.updateUsername({
+        currentUsername: currentUser.data?.username,
+        newUsername: username,
+      }),
+    );
   };
 
   return (
@@ -40,7 +60,13 @@ export const ChangeUsernameModal = () => {
             value={username}
           />
           <div className="actions">
-            <Button variant="contained" size="md" color="success">
+            <Button
+              variant="contained"
+              size="md"
+              color="success"
+              onClick={handleUpdateUsername}
+              disabled={!isChange}
+            >
               Update
             </Button>
           </div>

@@ -20,8 +20,11 @@ import { useAuthContext } from '@frontend/modules/auth';
 import { Navigation } from '@frontend/modules/navigation';
 import { Button } from '@frontend/components/button';
 import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
+import { useReduxDispatch } from '@frontend/redux/hooks';
+import { logout } from '@frontend/handlers/auth';
 
 export const Header = () => {
+  const dispatch = useReduxDispatch();
   const navigate = useNavigate();
   const styles = useStyles();
   const { user, isLogged } = useAuthContext();
@@ -29,12 +32,24 @@ export const Header = () => {
   console.log(user, isLogged);
 
   const handleNavigateProfilePage = () => {
-    navigate(PAGE_LINKS.PROFILE.path)
-  }
+    navigate(PAGE_LINKS.PROFILE.path);
+  };
 
   const handleNavigateUserManagementPage = () => {
-    navigate(PAGE_LINKS.USER_MANAGEMENT.path)
-  }
+    navigate(PAGE_LINKS.USER_MANAGEMENT.path);
+  };
+
+  const handleLogin = () => {
+    navigate(PAGE_LINKS.LOGIN.path);
+  };
+
+  const handleSignUp = () => {
+    navigate(PAGE_LINKS.REGISTER.path);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <div className={classnames(styles.root)}>
@@ -52,14 +67,21 @@ export const Header = () => {
               />
               <div className={classnames(styles.name)}>{user?.firstName}</div>
               <div className={classnames(styles.profileDropdown)}>
-                <div className={classnames(styles.dropdownContent)} onClick={handleNavigateProfilePage}>
+                <div
+                  className={classnames(styles.dropdownContent)}
+                  onClick={handleNavigateProfilePage}
+                >
                   Profile
                 </div>
-                <div className={classnames(styles.dropdownContent)} onClick={handleNavigateUserManagementPage}>
+                <div
+                  className={classnames(styles.dropdownContent)}
+                  onClick={handleNavigateUserManagementPage}
+                >
                   User management
                 </div>
                 <div
                   className={classnames(styles.dropdownContent, styles.logout)}
+                  onClick={handleLogout}
                 >
                   Log out
                 </div>
@@ -68,10 +90,15 @@ export const Header = () => {
           </>
         ) : (
           <>
-            <Button variant="outlined" size="md" color="default">
+            <Button
+              variant="outlined"
+              size="md"
+              color="default"
+              onClick={handleLogin}
+            >
               Log in
             </Button>
-            <Button variant="contained" size="md">
+            <Button variant="contained" size="md" onClick={handleSignUp}>
               Sign up
             </Button>
           </>
@@ -121,17 +148,19 @@ const useStyles = () => {
     profileDropdown: classnames(
       display('hidden', 'group-hover:block'),
       position('absolute'),
-      layout('top-12','-right-4'),
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      layout('top-12', '-right-4'),
       backgroundColor('bg-white'),
       borderRadius('rounded-xl'),
       sizing('w-48'),
       spacing('py-2'),
       boxShadow('shadow-md'),
-      borders('border')
+      borders('border'),
     ),
     dropdownContent: classnames(
-      spacing('px-4','py-2'),
-      backgroundColor('hover:bg-gray-50')
+      spacing('px-4', 'py-2'),
+      backgroundColor('hover:bg-gray-50'),
     ),
     logout: classnames(typography('text-red-500')),
   };

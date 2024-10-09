@@ -14,23 +14,39 @@ import classnames, {
   typography,
 } from '@frontend/tailwindcss-classnames';
 import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
+import { AuthController } from '@frontend/handlers/auth';
+import { useReduxDispatch } from '@frontend/redux/hooks';
 
 export const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useReduxDispatch();
+  const authController = AuthController.getInstance();
+
   const styles = useStyles();
-  const [email, setEmail] = useState();
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState();
 
-  const handleEmail = (e: any) => {
-    setEmail(e.target.value);
+  const handleUsername = (e: any) => {
+    setUsername(e.target.value);
   };
 
   const handlePassword = (e: any) => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = () => {
-    console.log(email, password);
+  const handleLogin = async () => {
+    console.log(username, password);
+    const data = await dispatch(
+      authController.login({
+        username,
+        password,
+      }),
+    );
+    console.log({data});
+    if (data?.payload?.token) {
+      // navigate(PAGE_LINKS.HOME.path);
+      window.location.reload();
+    }
   };
 
   const handleSignUp = () => {
@@ -44,13 +60,12 @@ export const Login = () => {
           <div className={classnames(styles.title)}>Login to your account</div>
           <div className={classnames(styles.form)}>
             <div className={classnames(styles.inputWrap)}>
-              <div className={classnames(styles.inputLabel)}>Email</div>
+              <div className={classnames(styles.inputLabel)}>Username</div>
               <Input
                 size="md"
-                placeholder="Enter your email"
-                type="email"
+                placeholder="Enter your username"
                 classNames={classnames(styles.input)}
-                onChange={handleEmail}
+                onChange={handleUsername}
               />
             </div>
             <div className={classnames(styles.inputWrap)}>

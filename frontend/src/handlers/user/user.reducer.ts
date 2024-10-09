@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { UserController } from './user.controller';
 import { UserState } from './types';
 import { User } from '@frontend/repositories';
+import { clearCookie } from '@frontend/helpers/cookie';
 
 const userController = UserController.getInstance();
 
@@ -48,20 +49,85 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.getUsers.fulfilled,
       (state, action): UserState => {
-        const { records, metadata } = action.payload;
-        const { currentPage, pageSize, totalCount } = metadata;
+        // const { currentPage, pageSize, totalCount } = metadata;
 
         return {
           ...state,
-          users: records.map((user: any): User => User.buildUser(user)),
-          currentPage,
-          pageSize,
-          totalUsers: totalCount,
+          users: action.payload.map((user: any): User => User.buildUser(user)),
+          // currentPage,
+          // pageSize,
+          // totalUsers: totalCount,
         };
       },
     );
     builder.addCase(
       userController.getUsers.rejected,
+      (state, action): UserState => {
+        return {
+          ...state,
+          error: action.payload,
+        };
+      },
+    );
+
+    // UpdateUserAPI
+    builder.addCase(
+      userController.updateUser.fulfilled,
+      (state, action): UserState => {
+        console.log(action.payload)
+        return {
+          ...state,
+        };
+      },
+    );
+    builder.addCase(
+      userController.updateUser.rejected,
+      (state, action): UserState => {
+        return {
+          ...state,
+          error: action.payload,
+        };
+      },
+    );
+
+    // UpdateUsernameAPI
+    builder.addCase(
+      userController.updateUsername.fulfilled,
+      (state, action): UserState => {
+        console.log(action.payload)
+        clearCookie('Authentication');
+        window.location.reload();
+
+        return {
+          ...state,
+        };
+      },
+    );
+    builder.addCase(
+      userController.updateUsername.rejected,
+      (state, action): UserState => {
+        return {
+          ...state,
+          error: action.payload,
+        };
+      },
+    );
+
+    // UpdatePasswordAPI
+    builder.addCase(
+      userController.updatePassword.fulfilled,
+      (state, action): UserState => {
+        console.log(action.payload)
+        clearCookie('Authentication');
+        window.location.reload();
+
+        return {
+          ...state,
+        };
+      },
+    );
+    builder.addCase(
+      userController.updatePassword.rejected,
       (state, action): UserState => {
         return {
           ...state,

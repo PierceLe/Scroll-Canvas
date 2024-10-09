@@ -10,23 +10,56 @@ import {
   spacing,
 } from '@frontend/tailwindcss-classnames';
 import { Button } from '@frontend/components/button';
+import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
+import { UserController } from '@frontend/handlers/user';
 
 export const ChangePasswordModal = () => {
+  const dispatch = useReduxDispatch();
+  const userController = UserController.getInstance();
+  const { userState } = useReduxSelector(['userState']);
+  const { currentUser } = userState;
   const [oldPassword, setOldPassword] = useState<string>();
   const [newPassword, setNewPassword] = useState<string>();
   const [repeatNewPassword, setRepeatNewPassword] = useState<string>();
+  const [isChange, setIsChange] = useState<boolean>(false);
   const styles = useStyles();
 
   const handleOldPassword = (e: any) => {
     setOldPassword(e.target.value);
+
+    if (!isChange) {
+      setIsChange(true);
+    }
   };
 
   const handleNewPassword = (e: any) => {
     setNewPassword(e.target.value);
+
+    if (!isChange) {
+      setIsChange(true);
+    }
   };
 
   const handleRepeatNewPassword = (e: any) => {
     setRepeatNewPassword(e.target.value);
+
+    if (!isChange) {
+      setIsChange(true);
+    }
+  };
+
+  const handleUpdatePassword = () => {
+    if (newPassword !== repeatNewPassword) {
+      alert("Repeat password dont match")
+    }
+
+    dispatch(
+      userController.updatePassword({
+        id: currentUser.data?.id,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      }),
+    );
   };
 
   return (
@@ -44,7 +77,7 @@ export const ChangePasswordModal = () => {
           <Input
             size="lg"
             placeholder="Enter your old password"
-            type="email"
+            type="password"
             classNames={classnames(styles.input)}
             onChange={handleOldPassword}
             value={oldPassword}
@@ -52,7 +85,7 @@ export const ChangePasswordModal = () => {
           <Input
             size="lg"
             placeholder="Enter your new password"
-            type="email"
+            type="password"
             classNames={classnames(styles.input)}
             onChange={handleNewPassword}
             value={newPassword}
@@ -60,13 +93,19 @@ export const ChangePasswordModal = () => {
           <Input
             size="lg"
             placeholder="Re enter your new password"
-            type="email"
+            type="password"
             classNames={classnames(styles.input)}
             onChange={handleRepeatNewPassword}
             value={repeatNewPassword}
           />
           <div className="actions">
-            <Button variant="contained" size="md" color="success">
+            <Button
+              variant="contained"
+              size="md"
+              color="success"
+              onClick={handleUpdatePassword}
+              disabled={!isChange}
+            >
               Update
             </Button>
           </div>

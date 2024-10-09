@@ -1,7 +1,7 @@
 import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 import { IServerCommunicate } from './serverCommunicate.interface';
 import axios, { AxiosRequestConfig } from 'axios';
-import { clearCookie } from '@frontend/helpers/cookie';
+import { clearCookie, getCookie } from '@frontend/helpers/cookie';
 
 export class ServerCommunicate implements IServerCommunicate {
   private static instance: ServerCommunicate;
@@ -22,12 +22,13 @@ export class ServerCommunicate implements IServerCommunicate {
         headers: {
           ...options?.headers,
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + getCookie("Authentication"),
         },
         withCredentials: true,
         ...options,
       })
         .then(res => {
-          return Promise.resolve(res?.data?.message);
+          return Promise.resolve(res?.data?.data);
         })
         .catch((error: any) => {
           // If got an unauthorized error, clear token and redirect to login page
