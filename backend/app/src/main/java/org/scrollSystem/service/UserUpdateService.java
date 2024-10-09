@@ -9,6 +9,7 @@ import org.scrollSystem.config.security.JwtService;
 import org.scrollSystem.exception.ValidationException;
 import org.scrollSystem.models.User;
 import org.scrollSystem.repository.UserRepository;
+import org.scrollSystem.request.UpdatePasswordRequest;
 import org.scrollSystem.request.UserUpdateRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class UserUpdateService {
     final UserRepository userRepository;
     final JwtService jwtService;
+    final UserAuthenticationService authenticationService;
     final int maxAttempts = 3;
     private final PasswordEncoder passwordEncoder;
     String firstName;
@@ -85,6 +87,28 @@ public class UserUpdateService {
 
         return "success";
 
+    }
+
+    private void setPassword(User user, String password) {
+        var salt = user.getSalt();
+        user.setPassword(passwordEncoder.encode(password + salt));
+    }
+
+    public String updatePassword(String user_id, UpdatePasswordRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!Objects.equals(user.getId(), user_id)) {
+            throw new ValidationException("No editing right");
+        }
+
+        if (!authenticationService.isAuthenticated(user, request.getOldPassword())) {
+            throw new ValidationException("Password fail");
+        }
+
+        setPassword(user, request.getNewPassword());
+        userRepository.save(user);
+
+        return "success";
     }
 }
 

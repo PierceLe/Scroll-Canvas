@@ -78,4 +78,16 @@ public class UserAuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
+    public boolean isAuthenticated(User user, String password) {
+        var hash = user.getSalt();
+        var hashInputPassword = passwordEncoder.encode(password + hash);
+
+        // Check the hash input
+        if (!hashInputPassword.equals(user.getPassword())) {
+            return false;
+        }
+
+        return true;
+    }
 }
