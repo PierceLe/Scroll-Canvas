@@ -1,41 +1,40 @@
-.gradle
-gradlew
-gradlew.bat
-app/build
-# Ignore Gradle build output directory
-build
+# Ignore in backend
+backend/.gradle
+backend/gradlew
+backend/gradlew.bat
+backend/app/build
+backend/app/bin
+backend/.env
+# Ignore in root project
 .DS_Store
 .idea/
-app/.DS_Store
-.env
+backend/.env
+.gradle
 
-**/.vite
-
+#Ignore in frontend
+frontend/node_modules
 # Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+frontend/logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
 
-**/node_modules
-**/dist
-**/dist-ssr
-*.local
+
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.generated.*
+frontend/.vscode/*
+frontend/!.vscode/extensions.json
+frontend/.idea
+frontend/.DS_Store
+frontend/*.suo
+frontend/*.ntvs*
+frontend/*.njsproj
+frontend/*.sln
+frontend/*.sw?
 
-# Environment
-.env
