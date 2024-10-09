@@ -9,7 +9,6 @@ import org.scrollSystem.response.DefaultResponse;
 import org.scrollSystem.service.UserAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,16 +24,11 @@ public class AuthenticationController {
         return DefaultResponse.success(userAuthenticationService.register(request));
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<DefaultResponse<AuthenticationResponse>> authenticate(
+
+    @PostMapping("/login")
+    public ResponseEntity<DefaultResponse<AuthenticationResponse>> login(
             @RequestBody AuthenticationRequest request
     ) {
-        return DefaultResponse.success(userAuthenticationService.authenticate(request));
-    }
-    @GetMapping("/check")
-    @PreAuthorize("hasRole('user')")
-    public ResponseEntity<DefaultResponse<String>> check(
-    ) {
-        return DefaultResponse.success("hello world");
+        return DefaultResponse.success(userAuthenticationService.login(request));
     }
 }

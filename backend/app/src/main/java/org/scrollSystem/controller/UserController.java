@@ -29,11 +29,12 @@ public class UserController {
         return DefaultListResponse.success(userService.getUsers(email, username));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DefaultResponse<String>> updateUser (
-            @PathVariable @NotNull Integer id,
-            @RequestBody UserRequest userRequest
-            ) {
-        return DefaultResponse.success(userService.update(id, userRequest));
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<DefaultResponse<String>> deleteUser (
+            @PathVariable @NotNull Integer id
+    ) {
+        return DefaultResponse.success(userService.delete(id));
     }
+
 }

@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String role;
     private String password;
     private String phone;
+    private String salt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -58,4 +59,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
 }

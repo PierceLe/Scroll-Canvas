@@ -1,5 +1,6 @@
 package org.scrollSystem.service;
 
+import org.scrollSystem.config.ApplicationConfig;
 import org.scrollSystem.config.security.JwtService;
 import org.scrollSystem.exception.ValidationException;
 import org.scrollSystem.models.User;
@@ -8,11 +9,13 @@ import org.scrollSystem.request.AuthenticationRequest;
 import org.scrollSystem.request.RegisterRequest;
 import org.scrollSystem.response.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -21,7 +24,8 @@ public class UserAuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+//    private final AuthenticationManager authenticationManager;
+    private final ApplicationConfig applicationConfig;
 
     public AuthenticationResponse register(RegisterRequest request) {
         Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
@@ -34,13 +38,16 @@ public class UserAuthenticationService {
             throw new ValidationException("Username have been existed");
         }
 
+        String salt = Base64.getEncoder().encodeToString(applicationConfig.getNextSalt());
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role("user")
+                .password(passwordEncoder.encode(request.getPassword() + salt))
+                .salt(salt)
+                .role("ROLE_USER")
+                .phone(request.getPhone())
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -49,14 +56,23 @@ public class UserAuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+
+    public AuthenticationResponse login(AuthenticationRequest request) {
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+
+
+        // Extract the hash
+        var hash = user.getSalt();
+        var hashInputPassword = passwordEncoder.encode(request.getPassword() + hash);
+
+        // Check the hash input
+        if (!hashInputPassword.equals(user.getPassword()))
+            return AuthenticationResponse.builder()
+                    .token(null)
+                    .build();
+
+
+        // Generate a token if the user logins successfully
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

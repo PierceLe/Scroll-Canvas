@@ -40,24 +40,10 @@ public class UserService {
         return response;
     }
 
-    @Transactional
-    public String update(Integer id, UserRequest request) {
+
+    public String delete(Integer id) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (!Objects.equals(user.getId(), id)) {
-            throw new ValidationException("No editing rights");
-        }
-
-        if (Objects.nonNull(request.getEmail())) {
-            user.setEmail(request.getEmail());
-        }
-
-        if (Objects.nonNull(request.getLastName())) {
-            user.setEmail(request.getLastName());
-        }
-        user.setPhone(request.getPhone());
-        userRepository.save(user);
-
+        userRepository.delete(user);
         return "Success";
     }
 }
