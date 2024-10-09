@@ -2,7 +2,6 @@
 backend/.gradle
 backend/gradlew
 backend/gradlew.bat
-backend/app/build
 backend/app/bin
 backend/.env
 # Ignore in root project
