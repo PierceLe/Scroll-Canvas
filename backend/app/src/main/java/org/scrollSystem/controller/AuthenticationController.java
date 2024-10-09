@@ -2,16 +2,24 @@ package org.scrollSystem.controller;
 
 
 import jakarta.validation.Valid;
+
+import javax.annotation.Nullable;
+
 import org.scrollSystem.request.AuthenticationRequest;
 import org.scrollSystem.request.RegisterRequest;
 import org.scrollSystem.request.UpdatePasswordRequest;
+import org.scrollSystem.request.UserUpdateRequest;
 import org.scrollSystem.response.AuthenticationResponse;
+import org.scrollSystem.response.DefaultListResponse;
 import org.scrollSystem.response.DefaultResponse;
+import org.scrollSystem.response.UserResponse;
 import org.scrollSystem.service.UserAuthenticationService;
+import org.scrollSystem.service.UserUpdateService;
+
 import lombok.RequiredArgsConstructor;
 import org.scrollSystem.service.UserService;
-import org.scrollSystem.service.UserUpdateService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,5 +58,26 @@ public class AuthenticationController {
             @RequestParam String username
     ) {
         return DefaultResponse.success(userService.checkExistingUsername(username));
+    }
+    
+    @GetMapping("/info")
+    public ResponseEntity<DefaultResponse<UserResponse>> register(
+    ) {
+        return DefaultResponse.success(userService.getInfo());
+    }
+
+    @PutMapping("/user/{user_id}")
+    public ResponseEntity<DefaultResponse<String>> update(@RequestBody @Valid UserUpdateRequest request,
+                                                           @PathVariable String user_id) {
+        return DefaultResponse.success(userUpdateService.update(request, user_id));
+    }
+
+    @GetMapping("users")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<DefaultListResponse<UserResponse>> getUsers(
+            @RequestParam @Nullable String email,
+            @RequestParam @Nullable String username
+    ) {
+        return DefaultListResponse.success(userService.getUsers(email, username));
     }
 }

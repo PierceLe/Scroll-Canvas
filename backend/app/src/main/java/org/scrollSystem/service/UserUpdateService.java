@@ -1,6 +1,5 @@
 package org.scrollSystem.service;
 
-
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,6 @@ public class UserUpdateService {
     String role;
     String phoneNumber;;
 
-
     @Transactional
     public String update(UserUpdateRequest request, String currUsername) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -44,11 +42,6 @@ public class UserUpdateService {
             throw new ValidationException("No editing right");
         }
 
-
-        var salt = user.getSalt();
-        var hashRequestCurrPassword = passwordEncoder.encode(request.getCurrentPassword() + salt);
-        if (!hashRequestCurrPassword.equals(user.getPassword()))
-            return "false at password";
 
 
         //Check for first name
@@ -64,19 +57,15 @@ public class UserUpdateService {
            user.setEmail(request.getEmail());
 
 
-        // Check for username
-        Optional <User> username = userRepository.findByUsername(request.getUsername());
-
-
-        if (Objects.nonNull(request.getUsername()))
+        if (Objects.nonNull(request.getUsername())) {
+            // Check for username
+            Optional<User> username = userRepository.findByUsername(request.getUsername());
+           
             if (username.isPresent())
                 return "The new username is already taken";
             user.setUsername(request.getUsername());
-
-
-        // Check for new password
-        if (Objects.nonNull((request.getNewPassword())))
-            user.setPassword(passwordEncoder.encode(request.getNewPassword() + salt));
+        }
+            
 
 
         // Check for phone number
@@ -97,7 +86,7 @@ public class UserUpdateService {
     public String updatePassword(String user_id, UpdatePasswordRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (!Objects.equals(user.getId(), user_id)) {
+        if (!Objects.equals(user.getId().toString(), user_id)) {
             throw new ValidationException("No editing right");
         }
 
@@ -111,4 +100,3 @@ public class UserUpdateService {
         return "success";
     }
 }
-
