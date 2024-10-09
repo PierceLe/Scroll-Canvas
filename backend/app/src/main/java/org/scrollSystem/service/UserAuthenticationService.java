@@ -68,7 +68,7 @@ public class UserAuthenticationService {
         // Check the hash input
         if (!hashInputPassword.equals(user.getPassword()))
             return AuthenticationResponse.builder()
-                    .token(null)
+                    .token("user enter wrong password")
                     .build();
 
 

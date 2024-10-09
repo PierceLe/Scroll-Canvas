@@ -36,5 +36,4 @@ public class UserController {
     ) {
         return DefaultResponse.success(userService.delete(id));
     }
-
 }
