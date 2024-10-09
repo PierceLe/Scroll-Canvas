@@ -46,4 +46,21 @@ public class UserService {
         userRepository.delete(user);
         return "Success";
     }
+
+
+    public UserResponse getInfo() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        UserResponse userResponse = UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .phone(user.getPhone())
+                .role(user.getRole())
+                .build();
+
+        return userResponse;
+    }
 }
