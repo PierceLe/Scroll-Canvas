@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,5 +63,15 @@ public class UserService {
                 .build();
 
         return userResponse;
+    }
+
+    public String checkExistingUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isPresent()) {
+            throw new ValidationException("Username is exist!");
+        }
+
+        return "Ok";
     }
 }
