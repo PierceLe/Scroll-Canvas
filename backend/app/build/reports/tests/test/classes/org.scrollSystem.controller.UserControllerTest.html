@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - UserControllerTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>UserControllerTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/org.scrollSystem.controller.html">org.scrollSystem.controller</a> &gt; UserControllerTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">2</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.176s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">deleteSuccessfully()</td>
+<td class="success">0.026s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetUsersSuccess()</td>
+<td class="success">0.150s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2024-10-10T23:45:49.707+11:00  INFO 18566 --- [scroll-system] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.scrollSystem.controller.UserControllerTest]: UserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-10-10T23:45:49.709+11:00  INFO 18566 --- [scroll-system] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.scrollSystem.App for test class org.scrollSystem.controller.UserControllerTest
+2024-10-10T23:45:49.718+11:00  INFO 18566 --- [scroll-system] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-10-10T23:45:49.718+11:00  INFO 18566 --- [scroll-system] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-10-10T23:45:49.718+11:00  INFO 18566 --- [scroll-system] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    insert 
+    into
+        users
+        (email, first_name, last_name, password, phone, role, salt, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    insert 
+    into
+        users
+        (email, first_name, last_name, password, phone, role, salt, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    insert 
+    into
+        users
+        (email, first_name, last_name, password, phone, role, salt, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        users 
+    set
+        email=?,
+        first_name=?,
+        last_name=?,
+        password=?,
+        phone=?,
+        role=?,
+        salt=?,
+        username=? 
+    where
+        id=?
+Hibernate: 
+    update
+        users 
+    set
+        email=?,
+        first_name=?,
+        last_name=?,
+        password=?,
+        phone=?,
+        role=?,
+        salt=?,
+        username=? 
+    where
+        id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        (
+            ? is null 
+            or u1_0.email like ('%'||?||'%') escape ''
+        ) 
+        and (
+            ? is null 
+            or u1_0.username like ('%'||?||'%') escape ''
+        )
+2024-10-10T23:45:49.863+11:00  INFO 18566 --- [scroll-system] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-10-10T23:45:49.863+11:00  INFO 18566 --- [scroll-system] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-10-10T23:45:49.864+11:00  INFO 18566 --- [scroll-system] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    insert 
+    into
+        users
+        (email, first_name, last_name, password, phone, role, salt, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    insert 
+    into
+        users
+        (email, first_name, last_name, password, phone, role, salt, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    insert 
+    into
+        users
+        (email, first_name, last_name, password, phone, role, salt, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        users 
+    set
+        email=?,
+        first_name=?,
+        last_name=?,
+        password=?,
+        phone=?,
+        role=?,
+        salt=?,
+        username=? 
+    where
+        id=?
+Hibernate: 
+    update
+        users 
+    set
+        email=?,
+        first_name=?,
+        last_name=?,
+        password=?,
+        phone=?,
+        role=?,
+        salt=?,
+        username=? 
+    where
+        id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.role,
+        u1_0.salt,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.10</a> at 10 Oct 2024, 11:45:50 pm</p>
+</div>
+</div>
+</body>
+</html>

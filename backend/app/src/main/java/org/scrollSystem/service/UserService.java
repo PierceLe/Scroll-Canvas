@@ -1,5 +1,6 @@
 package org.scrollSystem.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.scrollSystem.exception.ValidationException;
@@ -42,10 +43,14 @@ public class UserService {
     }
 
 
-    public String delete(Integer id) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userRepository.delete(user);
-        return "Success";
+    public String delete(String username) {
+        userRepository.findByUsername(username).ifPresentOrElse(
+                userRepository::delete,
+                () -> {
+                    throw new EntityNotFoundException("User with username " + username + " not found");
+                }
+        );
+        return "User with username " + username + " deleted successfully";
     }
 
 

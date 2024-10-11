@@ -29,11 +29,11 @@ public class UserController {
         return DefaultListResponse.success(userService.getUsers(email, username));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{usernamme}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<DefaultResponse<String>> deleteUser (
-            @PathVariable @NotNull Integer id
+            @PathVariable @NotNull String usernamme
     ) {
-        return DefaultResponse.success(userService.delete(id));
+        return DefaultResponse.success(userService.delete(usernamme));
     }
 }
