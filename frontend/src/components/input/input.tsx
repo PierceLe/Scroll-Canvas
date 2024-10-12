@@ -34,7 +34,7 @@ const useStyles = () => {
       classnames(
         size === 'sm' ? classnames(sizing('h-4')) : null,
         size === 'md'
-          ? classnames(sizing('h-8'), typography('text-tx14', 'md:text-tx16'))
+          ? classnames(sizing('h-8', 'md:h-10'), typography('text-tx14', 'md:text-tx16'))
           : null,
       ),
   };

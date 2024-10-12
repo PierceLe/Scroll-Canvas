@@ -106,7 +106,7 @@ export const Login = () => {
 
 const useStyles = () => {
   return {
-    root: classnames(display('grid'), grid('grid-cols-2'), sizing('h-screen')),
+    root: classnames(display('grid'), grid('grid-cols-2')),
     leftSide: classnames(),
     rightSide: classnames(backgroundColor('bg-primary-color')),
     leftSideBody: classnames(

@@ -20,6 +20,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { Button } from '@frontend/components/button';
 import { UserController } from '@frontend/handlers/user';
+import { FilterBlock } from './filterBlock';
 
 export const UserManagement = () => {
   const userController = UserController.getInstance();
@@ -30,7 +31,6 @@ export const UserManagement = () => {
   const styles = useStyles();
 
   const handleDeleteUser = (username: string) => {
-    console.log(username)
     dispatch(userController.deleteUser(username));
   };
 
@@ -131,6 +131,8 @@ export const UserManagement = () => {
     <div className={classnames(styles.root)}>
       <div className={classnames(styles.title)}>List users</div>
 
+      <FilterBlock/>
+      
       <Table
         data={users ?? []}
         columns={columns}

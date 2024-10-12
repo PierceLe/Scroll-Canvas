@@ -25,18 +25,15 @@ export const authSlice = createSlice({
   extraReducers: builder => {
     // RegisterAPI
     builder.addCase(authController.register.pending, state => {
-      state.currentUser.isLoading = true;
+      return {
+        ...state,
+      }
     });
     builder.addCase(
       authController.register.fulfilled,
       (state): AuthState => {
         return {
           ...state,
-          currentUser: {
-            ...state.currentUser,
-            isLoading: false,
-            // data: User.buildUser(action.payload),
-          },
         };
       },
     );
