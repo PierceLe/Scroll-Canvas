@@ -5,3 +5,5 @@ export * from './website';
 export * from './edit';
 export * from './delete';
 export * from './warning';
+export * from './eye';
+export * from './eyeSlash';

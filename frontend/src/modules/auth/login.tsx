@@ -16,6 +16,7 @@ import classnames, {
 import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 import { AuthController } from '@frontend/handlers/auth';
 import { useReduxDispatch } from '@frontend/redux/hooks';
+import { Icon } from '@frontend/components/icon';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export const Login = () => {
   const styles = useStyles();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [isShowPassword, setIsShowPassword] = useState<boolean>();
 
   const handleUsername = (e: any) => {
     setUsername(e.target.value);
@@ -34,15 +36,17 @@ export const Login = () => {
     setPassword(e.target.value);
   };
 
+  const handleShowPassword = () => {
+    setIsShowPassword(!isShowPassword);
+  };
+
   const handleLogin = async () => {
-    console.log(username, password);
     const data = await dispatch(
       authController.login({
         username,
         password,
       }),
     );
-    console.log({data});
     if (data?.payload?.token) {
       // navigate(PAGE_LINKS.HOME.path);
       window.location.reload();
@@ -73,9 +77,16 @@ export const Login = () => {
               <Input
                 size="md"
                 placeholder="Enter your password"
-                type="password"
+                type={isShowPassword ? '' : 'password'}
                 classNames={classnames(styles.input)}
                 onChange={handlePassword}
+                icon={
+                  <Icon
+                    type={isShowPassword ? 'eye' : 'eye-slash'}
+                    classNames={styles.icon}
+                    onClick={handleShowPassword}
+                  />
+                }
               />
             </div>
           </div>
@@ -106,7 +117,7 @@ export const Login = () => {
 
 const useStyles = () => {
   return {
-    root: classnames(display('grid'), grid('grid-cols-2')),
+    root: classnames(display('grid'), grid('grid-cols-2'), sizing('min-h-screen')),
     leftSide: classnames(),
     rightSide: classnames(backgroundColor('bg-primary-color')),
     leftSideBody: classnames(
@@ -123,5 +134,6 @@ const useStyles = () => {
 
     buttonLogin: classnames(sizing('w-full'), spacing('mb-4')),
     buttonSignUp: classnames(sizing('w-full')),
+    icon: classnames(sizing('w-5', 'h-5')),
   };
 };

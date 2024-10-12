@@ -18,6 +18,7 @@ import classnames, {
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { AuthController } from '@frontend/handlers/auth';
 import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
+import { Icon } from '@frontend/components/icon';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export const Register = () => {
   const [lastName, setLastName] = useState<string>();
   const [username, setUsername] = useState<string>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [isShowPassword, setIsShowPassword] = useState<boolean>();
 
   const handleInput = (type: string) => (e: any) => {
     const value: string = e.target.value;
@@ -62,17 +64,23 @@ export const Register = () => {
   };
 
   const handleSignUp = async () => {
-    const data = await dispatch(authController.register({
-      email,
-      password,
-      firstName,
-      lastName,
-      phone: phoneNumber,
-      username
-    }))
+    const data = await dispatch(
+      authController.register({
+        email,
+        password,
+        firstName,
+        lastName,
+        phone: phoneNumber,
+        username,
+      }),
+    );
     if (data?.payload?.token) {
       navigate(PAGE_LINKS.LOGIN.path);
     }
+  };
+
+  const handleShowPassword = () => {
+    setIsShowPassword(!isShowPassword);
   };
 
   return (
@@ -132,9 +140,16 @@ export const Register = () => {
               <Input
                 size="md"
                 placeholder="Enter your password"
-                type="password"
+                type={isShowPassword ? '' : 'password'}
                 classNames={classnames(styles.input)}
                 onChange={handleInput('password')}
+                icon={
+                  <Icon
+                    type={isShowPassword ? 'eye' : 'eye-slash'}
+                    classNames={styles.icon}
+                    onClick={handleShowPassword}
+                  />
+                }
               />
             </div>
           </div>
@@ -163,7 +178,11 @@ export const Register = () => {
 
 const useStyles = () => {
   return {
-    root: classnames(display('grid'), grid('md:grid-cols-2')),
+    root: classnames(
+      display('grid'),
+      grid('md:grid-cols-2'),
+      sizing('min-h-screen'),
+    ),
     leftSide: classnames(),
     rightSide: classnames(backgroundColor('bg-primary-color')),
     leftSideBody: classnames(
@@ -176,7 +195,10 @@ const useStyles = () => {
     form: classnames(spacing('mb-4')),
     inputWrap: classnames(spacing('mb-2', 'last:!mb-0')),
     input: classnames(sizing('w-full')),
-    inputLabel: classnames(spacing('mb-1'), typography('text-tx14', 'md:text-tx16')),
+    inputLabel: classnames(
+      spacing('mb-1'),
+      typography('text-tx14', 'md:text-tx16'),
+    ),
 
     buttonSignUp: classnames(sizing('w-full'), spacing('mb-2')),
     loginWrap: classnames(
@@ -185,6 +207,10 @@ const useStyles = () => {
       alignItems('items-center'),
       justifyContent('justify-start'),
     ),
-    loginTitle: classnames(typography('text-tx14', 'md:text-tx16'), spacing('mr-1')),
+    loginTitle: classnames(
+      typography('text-tx14', 'md:text-tx16'),
+      spacing('mr-1'),
+    ),
+    icon: classnames(sizing('w-5', 'h-5')),
   };
 };

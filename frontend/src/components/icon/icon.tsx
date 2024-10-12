@@ -8,13 +8,19 @@ import {
   DeleteIcon,
   EditIcon,
   WarningIcon,
+  EyeIcon,
+  EyeSlashIcon,
 } from './resources';
 
 export const Icon = (props: IconProps) => {
-  const { classNames, type } = props;
-  const styles = useStyles()
+  const { classNames, type, onClick } = props;
+  const styles = useStyles();
 
-  return <div className={classnames(classNames, styles.icon)}>{getIconByType(type)}</div>;
+  return (
+    <div className={classnames(classNames, styles.icon)} onClick={onClick}>
+      {getIconByType(type)}
+    </div>
+  );
 };
 
 const getIconByType = (type: IconType) => {
@@ -33,6 +39,10 @@ const getIconByType = (type: IconType) => {
       return <DeleteIcon />;
     case 'warning':
       return <WarningIcon />;
+    case 'eye':
+      return <EyeIcon />;
+    case 'eye-slash':
+      return <EyeSlashIcon />;
     default:
       return <></>;
   }
@@ -40,6 +50,6 @@ const getIconByType = (type: IconType) => {
 
 const useStyles = () => {
   return {
-    icon: classnames(cursor('cursor-pointer'))
+    icon: classnames(cursor('cursor-pointer')),
   };
 };
