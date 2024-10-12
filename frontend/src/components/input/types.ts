@@ -7,4 +7,5 @@ export type InputProps = {
   type?: React.HTMLInputTypeAttribute
   classNames?: TTailwindString
   value?: string | number | readonly string[] | undefined
+  icon?: any
 };
