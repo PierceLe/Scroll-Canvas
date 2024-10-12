@@ -14,6 +14,7 @@ import {
 import { Button } from '@frontend/components/button';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { AuthController } from '@frontend/handlers/auth';
+import { Icon } from '@frontend/components/icon';
 
 export const CreateUserModal = () => {
   const dispatch = useReduxDispatch();
@@ -24,6 +25,7 @@ export const CreateUserModal = () => {
   const [lastName, setLastName] = useState<string>();
   const [username, setUsername] = useState<string>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [isShowPassword, setIsShowPassword] = useState<boolean>();
 
   const styles = useStyles();
 
@@ -50,6 +52,10 @@ export const CreateUserModal = () => {
         setPassword(value);
         break;
     }
+  };
+
+  const handleShowPassword = () => {
+    setIsShowPassword(!isShowPassword);
   };
 
   const handleCreateUser = async () => {
@@ -134,9 +140,16 @@ export const CreateUserModal = () => {
               <Input
                 size="md"
                 placeholder="Enter your password"
-                type="password"
+                type={isShowPassword ? '' : 'password'}
                 classNames={classnames(styles.input)}
                 onChange={handleInput('password')}
+                icon={
+                  <Icon
+                    type={isShowPassword ? 'eye' : 'eye-slash'}
+                    classNames={styles.icon}
+                    onClick={handleShowPassword}
+                  />
+                }
               />
             </div>
           </div>
@@ -167,5 +180,6 @@ const useStyles = () => {
       typography('text-tx14', 'md:text-tx16'),
     ),
     action: classnames(display('flex'), justifyContent('justify-center')),
+    icon: classnames(sizing('w-5', 'h-5')),
   };
 };
