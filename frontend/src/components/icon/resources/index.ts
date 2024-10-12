@@ -4,3 +4,4 @@ export * from './user';
 export * from './website';
 export * from './edit';
 export * from './delete';
+export * from './warning';

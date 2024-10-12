@@ -2,6 +2,7 @@
 backend/.gradle
 backend/gradlew.bat
 backend/app/bin
+backend/app/build
 # Ignore in root project
 .DS_Store
 .idea/
@@ -33,3 +34,6 @@ frontend/*.ntvs*
 frontend/*.njsproj
 frontend/*.sln
 frontend/*.sw?
+
+
+.env
