@@ -1,21 +1,21 @@
 package org.scrollSystem.controller;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.scrollSystem.request.UserRequest;
+import org.scrollSystem.models.User;
 import org.scrollSystem.response.DefaultListResponse;
 import org.scrollSystem.response.DefaultResponse;
 import org.scrollSystem.response.UserResponse;
 import org.scrollSystem.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -29,11 +29,28 @@ public class UserController {
         return DefaultListResponse.success(userService.getUsers(email, username));
     }
 
+
     @DeleteMapping("/{usernamme}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<DefaultResponse<String>> deleteUser (
             @PathVariable @NotNull String usernamme
     ) {
         return DefaultResponse.success(userService.delete(usernamme));
+    }
+
+
+    @GetMapping("/info")
+    public ResponseEntity<DefaultResponse<UserResponse>> register(
+    ) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return DefaultResponse.success(userService.getInfo());
+    }
+
+    // API for checking exist username or not
+    @GetMapping("/check-username")
+    public ResponseEntity<DefaultResponse<String>> checkExistingUsername(
+            @RequestParam String username
+    ) {
+        return DefaultResponse.success(userService.checkExistingUsername(username));
     }
 }

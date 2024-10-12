@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.*;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.scrollSystem.request.UpdatePasswordRequest;
 import org.scrollSystem.request.UserUpdateRequest;
 import org.scrollSystem.response.DefaultResponse;
 import org.scrollSystem.service.UserUpdateService;
@@ -18,9 +19,19 @@ import org.springframework.web.bind.annotation.*;
 public class UpdateUserController {
     UserUpdateService userUpdateService;
 
+    // API for update user information like lastName, ...
     @PutMapping("/user/{user_id}")
     public ResponseEntity<DefaultResponse<String>> update(@RequestBody @Valid UserUpdateRequest request,
                                                            @PathVariable String user_id) {
         return DefaultResponse.success(userUpdateService.update(request, user_id));
+    }
+
+    // API for update the password
+    @PutMapping("password/{user_id}")
+    public ResponseEntity<DefaultResponse<String>> updatePassword(
+            @PathVariable String user_id,
+            @RequestBody @Valid UpdatePasswordRequest request
+    ) {
+        return DefaultResponse.success(userUpdateService.updatePassword(user_id, request));
     }
 }

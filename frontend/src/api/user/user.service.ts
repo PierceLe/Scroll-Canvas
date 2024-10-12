@@ -13,18 +13,18 @@ export class UserService extends BaseService {
   }
 
   public getCurrentUser(options: AxiosRequestConfig<any>) {
-    return this.serverCommunicate.get('/v1/auth/info', options);
+    return this.serverCommunicate.get('/v1/users/info', options);
   }
 
   public getUsers(options: AxiosRequestConfig<any>) {
-    return this.serverCommunicate.get('/v1/auth/users', options);
+    return this.serverCommunicate.get('/v1/users', options);
   }
 
   public updateUser(username: string, options: AxiosRequestConfig<any>) {
-    return this.serverCommunicate.put(`/v1/auth/user/${username}`, options);
+    return this.serverCommunicate.put(`/v1/update/user/${username}`, options);
   }
 
   public updatePassword(id: string, options: AxiosRequestConfig<any>) {
-    return this.serverCommunicate.put(`/v1/auth/change_password/${id}`, options);
+    return this.serverCommunicate.put(`/v1/update/password/${id}`, options);
   }
 }
