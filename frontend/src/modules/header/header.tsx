@@ -22,21 +22,18 @@ import { Button } from '@frontend/components/button';
 import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { logout } from '@frontend/handlers/auth';
+import { ROLE_TYPE } from '@frontend/repositories';
 
 export const Header = () => {
   const dispatch = useReduxDispatch();
   const navigate = useNavigate();
   const styles = useStyles();
-  const { user, isLogged } = useAuthContext();
+  const { isLoading, user, isLogged } = useAuthContext();
 
   console.log(user, isLogged);
 
   const handleNavigateProfilePage = () => {
     navigate(PAGE_LINKS.PROFILE.path);
-  };
-
-  const handleNavigateUserManagementPage = () => {
-    navigate(PAGE_LINKS.USER_MANAGEMENT.path);
   };
 
   const handleLogin = () => {
@@ -53,56 +50,63 @@ export const Header = () => {
 
   return (
     <div className={classnames(styles.root)}>
-      <div className={classnames(styles.logo)}>LOGO</div>
+      <div className={classnames(styles.logo)}>
+        {!isLoading
+          ? user?.role === ROLE_TYPE.ADMIN
+            ? 'ADMIN'
+            : user?.role === ROLE_TYPE.USER
+            ? 'USER'
+            : 'GUEST'
+          : ''}
+      </div>
       <div className={styles.navigation}>
         <Navigation />
       </div>
       <div className={classnames(styles.profile)}>
-        {isLogged ? (
-          <>
-            <div className={classnames(styles.profileWrap)}>
-              <img
-                src="../../../public/react.png"
-                className={classnames(styles.avatar)}
-              />
-              <div className={classnames(styles.name)}>{user?.firstName}</div>
-              <div className={classnames(styles.profileDropdown)}>
-                <div
-                  className={classnames(styles.dropdownContent)}
-                  onClick={handleNavigateProfilePage}
-                >
-                  Profile
-                </div>
-                <div
-                  className={classnames(styles.dropdownContent)}
-                  onClick={handleNavigateUserManagementPage}
-                >
-                  User management
-                </div>
-                <div
-                  className={classnames(styles.dropdownContent, styles.logout)}
-                  onClick={handleLogout}
-                >
-                  Log out
+        {!isLoading ? (
+          isLogged ? (
+            <>
+              <div className={classnames(styles.profileWrap)}>
+                <img
+                  src="../../../public/react.png"
+                  className={classnames(styles.avatar)}
+                />
+                <div className={classnames(styles.name)}>{user?.firstName}</div>
+                <div className={classnames(styles.profileDropdown)}>
+                  <div
+                    className={classnames(styles.dropdownContent)}
+                    onClick={handleNavigateProfilePage}
+                  >
+                    Profile
+                  </div>
+                  <div
+                    className={classnames(
+                      styles.dropdownContent,
+                      styles.logout,
+                    )}
+                    onClick={handleLogout}
+                  >
+                    Log out
+                  </div>
                 </div>
               </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <Button
-              variant="outlined"
-              size="md"
-              color="default"
-              onClick={handleLogin}
-            >
-              Log in
-            </Button>
-            <Button variant="contained" size="md" onClick={handleSignUp}>
-              Sign up
-            </Button>
-          </>
-        )}
+            </>
+          ) : (
+            <>
+              <Button
+                variant="outlined"
+                size="md"
+                color="default"
+                onClick={handleLogin}
+              >
+                Log in
+              </Button>
+              <Button variant="contained" size="md" onClick={handleSignUp}>
+                Sign up
+              </Button>
+            </>
+          )
+        ) : null}
       </div>
     </div>
   );
@@ -115,6 +119,7 @@ const useStyles = () => {
       display('flex'),
       justifyContent('justify-between'),
       spacing('px-10'),
+      alignItems('items-center'),
     ),
     navigation: classnames(sizing('w-2/3')),
     title: classnames(typography('text-gray-6', 'font-semibold', 'text-tx20')),
@@ -129,10 +134,7 @@ const useStyles = () => {
       borders('border-l', 'border-gray-400'),
       sizing('h-2/3'),
     ),
-    logo: classnames(
-      typography('font-bold', 'text-tx22'),
-      spacing('mb-10', 'px-5'),
-    ),
+    logo: classnames(typography('font-bold', 'text-tx22'), spacing('px-5')),
     profileWrap: classnames(
       display('flex'),
       gap('gap-2'),

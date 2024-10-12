@@ -8,15 +8,23 @@ export class User {
   public role?: string;
 
   public static buildUser(user: any): User {
-    console.log({user})
-    return {
-      id: user?.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      phone: user.phone,
-      role: user.role
-    };
+    const newUser = new User();
+    newUser.id = user?.id;
+    newUser.email = user.email;
+    newUser.firstName = user.firstName;
+    newUser.lastName = user.lastName;
+    newUser.username = user.username;
+    newUser.phone = user.phone;
+    newUser.role = user.role;
+    return newUser;
+  }
+
+  public isAdmin(): boolean {
+    return this.role === ROLE_TYPE.ADMIN;
   }
 }
+
+export const ROLE_TYPE = {
+  ADMIN: 'ROLE_ADMIN',
+  USER: 'ROLE_USER',
+};
