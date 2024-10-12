@@ -1,7 +1,10 @@
 import classnames, {
+  alignItems,
   backgroundColor,
   borderRadius,
   borders,
+  display,
+  justifyContent,
   sizing,
   spacing,
   typography,
@@ -39,7 +42,13 @@ export const Button = (props: ButtonProps) => {
 
 const useStyles = () => {
   return {
-    common: classnames(borderRadius('rounded-xl'), spacing('p-2')),
+    common: classnames(
+      borderRadius('rounded-xl'),
+      spacing('p-2'),
+      display('flex'),
+      alignItems('items-center'),
+      justifyContent('justify-center')
+    ),
     variant: (
       variant: ButtonVariant,
       disabled?: boolean,
@@ -80,9 +89,7 @@ const useStyles = () => {
                   )
                 : null,
               color === 'default'
-                ? classnames(
-                    backgroundColor('hover:bg-gray-100'),
-                  )
+                ? classnames(backgroundColor('hover:bg-gray-100'))
                 : null,
             )
           : null,

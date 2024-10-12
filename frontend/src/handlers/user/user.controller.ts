@@ -27,10 +27,12 @@ export class UserController {
     },
   );
 
-  public getUsers = createAsyncThunk(
+  public getUsers = createAsyncThunk<any, any>(
     'getUsersAPI',
-    async (_, { rejectWithValue }) => {
-      const fetchFn = this.userService.getUsers({});
+    async (params, { rejectWithValue }) => {
+      const fetchFn = this.userService.getUsers({
+        params
+      });
 
       try {
         const response = await fetchFn();
