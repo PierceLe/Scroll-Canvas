@@ -96,7 +96,6 @@ export const userSlice = createSlice({
       (state, action): UserState => {
         console.log(action.payload);
         clearCookie('Authentication');
-        window.location.reload();
 
         return {
           ...state,
@@ -119,7 +118,6 @@ export const userSlice = createSlice({
       (state, action): UserState => {
         console.log(action.payload);
         clearCookie('Authentication');
-        window.location.reload();
 
         return {
           ...state,
