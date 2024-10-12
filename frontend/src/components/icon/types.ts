@@ -11,4 +11,5 @@ export type IconType =
   | 'user'
   | 'website'
   | 'edit'
-  | 'delete';
+  | 'delete'
+  | 'warning';

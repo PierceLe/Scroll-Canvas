@@ -27,4 +27,8 @@ export class UserService extends BaseService {
   public updatePassword(id: string, options: AxiosRequestConfig<any>) {
     return this.serverCommunicate.put(`/v1/update/password/${id}`, options);
   }
+
+  public deleteUser(username: string, options: AxiosRequestConfig<any>) {
+    return this.serverCommunicate.delete(`/v1/users/${username}`, options);
+  }
 }
