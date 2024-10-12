@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
@@ -12,8 +13,10 @@ import {
 import { Button } from '@frontend/components/button';
 import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
 import { UserController } from '@frontend/handlers/user';
+import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 
 export const ChangePasswordModal = () => {
+  const navigate = useNavigate();
   const dispatch = useReduxDispatch();
   const userController = UserController.getInstance();
   const { userState } = useReduxSelector(['userState']);
@@ -48,18 +51,21 @@ export const ChangePasswordModal = () => {
     }
   };
 
-  const handleUpdatePassword = () => {
+  const handleUpdatePassword = async () => {
     if (newPassword !== repeatNewPassword) {
       alert("Repeat password dont match")
     }
 
-    dispatch(
+    await dispatch(
       userController.updatePassword({
         id: currentUser.data?.id,
         oldPassword: oldPassword,
         newPassword: newPassword,
       }),
     );
+
+    navigate(PAGE_LINKS.HOME.path);
+    window.location.reload();
   };
 
   return (
@@ -74,6 +80,10 @@ export const ChangePasswordModal = () => {
       >
         <div className="modal">
           <div className={classnames(styles.title)}>Enter new password</div>
+          <div className={classnames(styles.note)}>
+            <span>*</span> After change
+            password successfully, you will be redirected to home
+          </div>
           <Input
             size="lg"
             placeholder="Enter your old password"
@@ -119,5 +129,6 @@ const useStyles = () => {
   return {
     title: classnames(typography('text-tx22', 'font-bold'), spacing('mb-5')),
     input: classnames(sizing('w-full'), spacing('mb-5')),
+    note: classnames(spacing('mb-5'), typography('text-red-500')),
   };
 };
