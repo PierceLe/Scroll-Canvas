@@ -74,7 +74,7 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.updateUser.fulfilled,
       (state, action): UserState => {
-        console.log(action.payload)
+        console.log(action.payload);
         return {
           ...state,
         };
@@ -94,7 +94,7 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.updateUsername.fulfilled,
       (state, action): UserState => {
-        console.log(action.payload)
+        console.log(action.payload);
         clearCookie('Authentication');
         window.location.reload();
 
@@ -117,7 +117,7 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.updatePassword.fulfilled,
       (state, action): UserState => {
-        console.log(action.payload)
+        console.log(action.payload);
         clearCookie('Authentication');
         window.location.reload();
 
@@ -128,6 +128,30 @@ export const userSlice = createSlice({
     );
     builder.addCase(
       userController.updatePassword.rejected,
+      (state, action): UserState => {
+        return {
+          ...state,
+          error: action.payload,
+        };
+      },
+    );
+
+    // DeleteUserAPI
+    builder.addCase(
+      userController.deleteUser.fulfilled,
+      (state, action): UserState => {
+        const users = state.users?.filter(
+          item => item.username !== action.payload.username,
+        );
+
+        return {
+          ...state,
+          users,
+        };
+      },
+    );
+    builder.addCase(
+      userController.deleteUser.rejected,
       (state, action): UserState => {
         return {
           ...state,

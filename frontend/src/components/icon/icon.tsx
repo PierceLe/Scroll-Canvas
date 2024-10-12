@@ -1,4 +1,4 @@
-import classnames from '@frontend/tailwindcss-classnames';
+import classnames, { cursor } from '@frontend/tailwindcss-classnames';
 import { IconProps, IconType } from './types';
 import {
   BellIcon,
@@ -7,12 +7,14 @@ import {
   WebsiteIcon,
   DeleteIcon,
   EditIcon,
+  WarningIcon,
 } from './resources';
 
 export const Icon = (props: IconProps) => {
   const { classNames, type } = props;
+  const styles = useStyles()
 
-  return <div className={classnames(classNames)}>{getIconByType(type)}</div>;
+  return <div className={classnames(classNames, styles.icon)}>{getIconByType(type)}</div>;
 };
 
 const getIconByType = (type: IconType) => {
@@ -29,7 +31,15 @@ const getIconByType = (type: IconType) => {
       return <EditIcon />;
     case 'delete':
       return <DeleteIcon />;
+    case 'warning':
+      return <WarningIcon />;
     default:
       return <></>;
   }
+};
+
+const useStyles = () => {
+  return {
+    icon: classnames(cursor('cursor-pointer'))
+  };
 };

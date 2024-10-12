@@ -1,19 +1,38 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import classnames, {
   backgroundColor,
   spacing,
   borderRadius,
   borders,
   typography,
+  sizing,
+  display,
+  justifyContent,
+  fill,
+  alignItems,
+  gap,
 } from '@frontend/tailwindcss-classnames';
-import { useReduxSelector } from '@frontend/redux/hooks';
+import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
 import { Table } from '@frontend/components/table';
 import { createColumnHelper } from '@tanstack/react-table';
+import { Icon } from '@frontend/components/icon';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { Button } from '@frontend/components/button';
+import { UserController } from '@frontend/handlers/user';
 
 export const UserManagement = () => {
+  const userController = UserController.getInstance();
   const { userState } = useReduxSelector(['userState']);
+  const dispatch = useReduxDispatch();
   const { users } = userState;
 
   const styles = useStyles();
+
+  const handleDeleteUser = (username: string) => {
+    console.log(username)
+    dispatch(userController.deleteUser(username));
+  };
 
   const columnHelper = createColumnHelper<any>();
 
@@ -40,6 +59,73 @@ export const UserManagement = () => {
       cell: info => info.getValue(),
       header: 'Phone',
     }),
+    columnHelper.accessor(
+      row => {
+        return {
+          id: row.id,
+          username: row.username,
+        }
+      },
+      {
+        id: 'action',
+        cell: info => (
+          <div className={classnames(styles.action)}>
+            <Popup
+              key="deleteUser"
+              trigger={
+                <button>
+                  <Icon
+                    classNames={classnames(styles.icon, styles.deleteIcon)}
+                    type="delete"
+                  ></Icon>
+                </button>
+              }
+              modal={true}
+              closeOnDocumentClick
+            >
+              {/** @ts-ignore */}
+              {close => (
+                <div className="modal">
+                  <div className={classnames(styles.deleteWarn)}>
+                    <Icon
+                      classNames={classnames(styles.warnIcon)}
+                      type="warning"
+                    ></Icon>
+                    <div className={classnames(styles.deleteWarnTitle)}>
+                      Do you want to delete this user?
+                    </div>
+                  </div>
+
+                  <div className={`actions ${classnames(styles.deleteAction)}`}>
+                    <Button
+                      variant="contained"
+                      size="md"
+                      color="success"
+                      onClick={() => handleDeleteUser(info.getValue().username)}
+                    >
+                      OK
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="md"
+                      color="danger"
+                      onClick={() => {
+                        close();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </Popup>
+          </div>
+        ),
+        header: () => (
+          <div className={classnames(styles.actionHeader)}>Action</div>
+        ),
+      },
+    ),
   ];
   return (
     <div className={classnames(styles.root)}>
@@ -70,7 +156,26 @@ const useStyles = () => {
       borderRadius('rounded-2xl'),
       borders('border-2'),
     ),
-    title: classnames(typography('text-tx22'), spacing('mb-4')),
-    
+    title: classnames(typography('text-tx26', 'font-bold'), spacing('mb-4')),
+    action: classnames(display('flex'), justifyContent('justify-center')),
+    actionHeader: classnames(typography('text-center')),
+    icon: classnames(sizing('h-4', 'w-4')),
+    // @ts-ignore
+    deleteIcon: classnames(fill('fill-red-500')),
+    // @ts-ignore
+    warnIcon: classnames(sizing('h-8', 'w-8'), fill('fill-yellow-500')),
+    deleteWarn: classnames(
+      display('flex'),
+      justifyContent('justify-center'),
+      alignItems('items-center'),
+      gap('gap-2'),
+      spacing('mb-6'),
+    ),
+    deleteWarnTitle: classnames(typography('text-tx22', 'font-bold')),
+    deleteAction: classnames(
+      display('flex'),
+      justifyContent('justify-center'),
+      gap('gap-2'),
+    ),
   };
 };

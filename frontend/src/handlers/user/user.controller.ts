@@ -50,7 +50,7 @@ export class UserController {
           firstName: data?.firstName,
           lastName: data?.lastName,
           phone: data?.phoneNumber,
-        }
+        },
       });
 
       try {
@@ -68,7 +68,7 @@ export class UserController {
       const fetchFn = this.userService.updateUser(data.currentUsername, {
         data: {
           username: data?.newUsername,
-        }
+        },
       });
 
       try {
@@ -87,12 +87,26 @@ export class UserController {
         data: {
           oldPassword: data?.oldPassword,
           newPassword: data?.newPassword,
-        }
+        },
       });
 
       try {
         const response = await fetchFn();
         return response;
+      } catch (err: any) {
+        return rejectWithValue(err.message);
+      }
+    },
+  );
+
+  public deleteUser = createAsyncThunk<any, any>(
+    'deleteUserAPI',
+    async (username, { rejectWithValue }) => {
+      const fetchFn = this.userService.deleteUser(username, {});
+
+      try {
+        await fetchFn();
+        return { username };
       } catch (err: any) {
         return rejectWithValue(err.message);
       }
