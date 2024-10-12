@@ -10,15 +10,20 @@ import classnames, {
   borderRadius,
 } from '@frontend/tailwindcss-classnames';
 import { Link } from 'react-router-dom';
+import { useAuthContext } from '@frontend/modules/auth';
 
 export const Navigation = () => {
   const styles = useStyles();
+  const { user } = useAuthContext();
 
-  const pages = [PAGE_LINKS.HOME, PAGE_LINKS.DASHBOARD];
+  const pages = [PAGE_LINKS.HOME, PAGE_LINKS.USER_MANAGEMENT];
   return (
     <div className={styles.navigation}>
       {pages.map(page => {
-        return <NavigationItem title={page.title} path={page.path} />;
+        return page.roles === 'all' ||
+          (user?.role ? page.roles.includes(user.role) : false) ? (
+          <NavigationItem title={page.title} path={page.path} />
+        ) : null;
       })}
     </div>
   );
@@ -52,7 +57,7 @@ const useNavigationItemStyles = () => {
       spacing('py-2', 'px-4'),
       typography('text-gray-600', 'text-tx18', 'hover:text-primary-color'),
       backgroundColor('hover:bg-gray-100'),
-      borderRadius('rounded-3xl')
+      borderRadius('rounded-3xl'),
     ),
   };
 };
