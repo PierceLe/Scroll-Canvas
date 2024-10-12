@@ -1,36 +1,31 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
-import { Button } from '@frontend/components/button';
 import { Input } from '@frontend/components/input';
-import classnames, {
-  backgroundColor,
-  display,
-  grid,
+import {
+  classnames,
+  typography,
   sizing,
   spacing,
-  borderRadius,
-  borders,
-  typography,
-  alignItems,
+  display,
   justifyContent,
 } from '@frontend/tailwindcss-classnames';
+import { Button } from '@frontend/components/button';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { AuthController } from '@frontend/handlers/auth';
-import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 
-export const Register = () => {
-  const navigate = useNavigate();
+export const CreateUserModal = () => {
   const dispatch = useReduxDispatch();
   const authController = AuthController.getInstance();
-
-  const styles = useStyles();
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [firstName, setFirstName] = useState<string>();
   const [lastName, setLastName] = useState<string>();
   const [username, setUsername] = useState<string>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
+
+  const styles = useStyles();
 
   const handleInput = (type: string) => (e: any) => {
     const value: string = e.target.value;
@@ -57,29 +52,36 @@ export const Register = () => {
     }
   };
 
-  const handleLogin = () => {
-    navigate(PAGE_LINKS.LOGIN.path);
-  };
-
-  const handleSignUp = async () => {
-    const data = await dispatch(authController.register({
-      email,
-      password,
-      firstName,
-      lastName,
-      phone: phoneNumber,
-      username
-    }))
-    if (data?.payload?.token) {
-      navigate(PAGE_LINKS.LOGIN.path);
-    }
+  const handleCreateUser = async () => {
+    await dispatch(
+      authController.register({
+        email,
+        password,
+        firstName,
+        lastName,
+        phone: phoneNumber,
+        username,
+      }),
+    );
+    window.location.reload();
   };
 
   return (
-    <div className={classnames(styles.root)}>
-      <div className={classnames(styles.leftSide)}>
-        <div className={classnames(styles.leftSideBody)}>
-          <div className={classnames(styles.title)}>Join Scrolling System</div>
+    <div>
+      <Popup
+        key="createUserModal"
+        trigger={
+          <button>
+            <Button variant="contained" size="md" color="success">
+              Create user
+            </Button>
+          </button>
+        }
+        modal={true}
+        closeOnDocumentClick
+      >
+        <div className="modal">
+          <div className={classnames(styles.title)}>Create new user</div>
           <div className={classnames(styles.form)}>
             <div className={classnames(styles.inputWrap)}>
               <div className={classnames(styles.inputLabel)}>First Name</div>
@@ -138,53 +140,32 @@ export const Register = () => {
               />
             </div>
           </div>
-          <Button
-            variant="contained"
-            size="md"
-            classNames={classnames(styles.buttonSignUp)}
-            onClick={handleSignUp}
-          >
-            Create Account
-          </Button>
-          <div className={classnames(styles.loginWrap)}>
-            <div className={classnames(styles.loginTitle)}>
-              Already a member?
-            </div>
-            <Button variant="text" size="md" onClick={handleLogin}>
-              Click here to login
+          <div className={`actions ${classnames(styles.action)}`}>
+            <Button
+              variant="contained"
+              size="md"
+              color="success"
+              onClick={handleCreateUser}
+            >
+              Create user
             </Button>
           </div>
         </div>
-      </div>
-      <div className={classnames(styles.rightSide)}></div>
+      </Popup>
     </div>
   );
 };
 
 const useStyles = () => {
   return {
-    root: classnames(display('grid'), grid('md:grid-cols-2')),
-    leftSide: classnames(),
-    rightSide: classnames(backgroundColor('bg-primary-color')),
-    leftSideBody: classnames(
-      spacing('mt-1/10-screen', 'mx-10', 'px-10', 'py-5'),
-      backgroundColor('bg-white'),
-      borderRadius('rounded-2xl'),
-      borders('border-2'),
-    ),
-    title: classnames(typography('text-tx22'), spacing('mb-4')),
+    title: classnames(typography('text-tx22', 'font-bold'), spacing('mb-5')),
     form: classnames(spacing('mb-4')),
     inputWrap: classnames(spacing('mb-2', 'last:!mb-0')),
     input: classnames(sizing('w-full')),
-    inputLabel: classnames(spacing('mb-1'), typography('text-tx14', 'md:text-tx16')),
-
-    buttonSignUp: classnames(sizing('w-full'), spacing('mb-2')),
-    loginWrap: classnames(
-      sizing('w-full'),
-      display('flex'),
-      alignItems('items-center'),
-      justifyContent('justify-start'),
+    inputLabel: classnames(
+      spacing('mb-1'),
+      typography('text-tx14', 'md:text-tx16'),
     ),
-    loginTitle: classnames(typography('text-tx14', 'md:text-tx16'), spacing('mr-1')),
+    action: classnames(display('flex'), justifyContent('justify-center')),
   };
 };

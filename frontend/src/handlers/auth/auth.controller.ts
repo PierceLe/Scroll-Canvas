@@ -16,7 +16,6 @@ export class AuthController {
   public register = createAsyncThunk<any, any>(
     'registerAPI',
     async (data, { rejectWithValue }) => {
-      console.log(data);
       const fetchFn = this.authService.register({
         data,
       });

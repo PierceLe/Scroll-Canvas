@@ -4,13 +4,13 @@ import { classnames, typography } from '@frontend/tailwindcss-classnames';
 import { UserController } from '@frontend/handlers/user';
 import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
 
-const HomePage = () => {
+const UserManagementPage = () => {
   const userController = UserController.getInstance();
   const { userState } = useReduxSelector(['userState']);
   const dispatch = useReduxDispatch();
 
   React.useEffect(() => {
-    dispatch(userController.getUsers());
+    dispatch(userController.getUsers({}));
   }, []);
 
   React.useEffect(() => {
@@ -20,4 +20,4 @@ const HomePage = () => {
   return <div className={classnames(typography('font-bold'))}>Home</div>;
 };
 
-export default HomePage;
+export default UserManagementPage;
