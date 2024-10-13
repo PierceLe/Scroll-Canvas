@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { AuthController } from './auth.controller';
 import { AuthState } from './types';
 import { clearCookie, setCookie } from '@frontend/helpers/cookie';
+import { toast } from 'react-toastify';
 
 const authController = AuthController.getInstance();
 
@@ -40,6 +41,8 @@ export const authSlice = createSlice({
     builder.addCase(
       authController.register.rejected,
       (state, action): AuthState => {
+        toast.error('Register unsuccessfully!');
+
         return {
           ...state,
           currentUser: {
@@ -65,6 +68,8 @@ export const authSlice = createSlice({
     builder.addCase(
       authController.login.rejected,
       (state, action): AuthState => {
+        toast.error('Login unsuccessfully!');
+
         return {
           ...state,
           error: action.payload,

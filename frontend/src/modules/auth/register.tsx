@@ -19,6 +19,8 @@ import { useReduxDispatch } from '@frontend/redux/hooks';
 import { AuthController } from '@frontend/handlers/auth';
 import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 import { Icon } from '@frontend/components/icon';
+import { toast } from 'react-toastify';
+import { sleep } from '@frontend/helpers/sleep';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -75,6 +77,8 @@ export const Register = () => {
       }),
     );
     if (data?.payload?.token) {
+      toast.info('Register successfully!');
+      await sleep(1000);
       navigate(PAGE_LINKS.LOGIN.path);
     }
   };
