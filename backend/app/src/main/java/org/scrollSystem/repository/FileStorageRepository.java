@@ -15,4 +15,7 @@ public interface FileStorageRepository extends JpaRepository<FileStorage, Intege
 //    @Query("SELECT f.filePath FROM FileStorage f WHERE f.owner.id = :ownerId")
 //    Optional<String> findFilePathsByOwnerId(Integer ownerId);
 
+    Optional<FileStorage> getFileStorageByFileId(Integer id);
+    Optional<FileStorage> getFileStorageByTitle(String title);
+
 }

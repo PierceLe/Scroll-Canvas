@@ -20,6 +20,9 @@ public class FileStorage {
     private Integer fileId;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private String filePath;
 
     @Column(nullable = false)
@@ -34,5 +37,13 @@ public class FileStorage {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    @Column(nullable = false)
+    private Integer downloadAmount;
+
+    @PrePersist
+    protected void onCreate() {
+        uploadDate = new Timestamp(System.currentTimeMillis());
+        downloadAmount = 0;
+    }
 }
 
