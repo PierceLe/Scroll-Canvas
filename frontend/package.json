@@ -26,7 +26,8 @@
     "reactjs-popup": "^2.0.6",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
-    "tailwindcss-classnames": "^3.1.0"
+    "tailwindcss-classnames": "^3.1.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.8.9",

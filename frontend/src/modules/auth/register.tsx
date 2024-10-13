@@ -21,6 +21,7 @@ import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 import { Icon } from '@frontend/components/icon';
 import { toast } from 'react-toastify';
 import { sleep } from '@frontend/helpers/sleep';
+import { object, string } from 'yup';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -66,6 +67,44 @@ export const Register = () => {
   };
 
   const handleSignUp = async () => {
+    const userSchema = object({
+      username: string()
+        .length(8)
+        .matches(
+          /^[a-z0-9]+/,
+          'Your username must only contain digits and letters',
+        )
+        .required(),
+      password: string()
+        .min(8)
+        .max(16)
+        .matches(
+          /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,16}$/,
+          'Password must contain at least one digit, one uppercase and lowercase letter, one special character, and may include spaces or tabs',
+        )
+        .required(),
+      email: string().email().required(),
+      firstName: string().required(),
+      lastName: string().required(),
+      phone: string().required(),
+    });
+
+    const userLogin = {
+      email,
+      password,
+      firstName,
+      lastName,
+      phone: phoneNumber,
+      username,
+    };
+
+    try {
+      await userSchema.validate(userLogin);
+    } catch (error: any) {
+      toast.error(error.message);
+      return;
+    }
+
     const data = await dispatch(
       authController.register({
         email,
