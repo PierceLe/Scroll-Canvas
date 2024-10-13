@@ -17,6 +17,8 @@ import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 import { AuthController } from '@frontend/handlers/auth';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { Icon } from '@frontend/components/icon';
+import { toast } from 'react-toastify';
+import { sleep } from '@frontend/helpers/sleep';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -48,7 +50,8 @@ export const Login = () => {
       }),
     );
     if (data?.payload?.token) {
-      // navigate(PAGE_LINKS.HOME.path);
+      toast.info('Login successfully!');
+      await sleep(1000);
       window.location.reload();
     }
   };

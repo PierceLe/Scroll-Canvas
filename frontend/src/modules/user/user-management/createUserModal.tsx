@@ -15,6 +15,7 @@ import { Button } from '@frontend/components/button';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { AuthController } from '@frontend/handlers/auth';
 import { Icon } from '@frontend/components/icon';
+import { toast } from 'react-toastify';
 
 export const CreateUserModal = () => {
   const dispatch = useReduxDispatch();
@@ -69,6 +70,8 @@ export const CreateUserModal = () => {
         username,
       }),
     );
+    toast.info('Create user successfully!');
+
     window.location.reload();
   };
 

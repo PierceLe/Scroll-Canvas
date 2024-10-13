@@ -3,6 +3,7 @@ import { UserController } from './user.controller';
 import { UserState } from './types';
 import { User } from '@frontend/repositories';
 import { clearCookie } from '@frontend/helpers/cookie';
+import { toast } from 'react-toastify';
 
 const userController = UserController.getInstance();
 
@@ -75,6 +76,8 @@ export const userSlice = createSlice({
       userController.updateUser.fulfilled,
       (state, action): UserState => {
         console.log(action.payload);
+        toast.info('Update user successfully!');
+
         return {
           ...state,
         };
@@ -83,6 +86,7 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.updateUser.rejected,
       (state, action): UserState => {
+        toast.error('Update user unsuccessfully!');
         return {
           ...state,
           error: action.payload,
@@ -95,6 +99,7 @@ export const userSlice = createSlice({
       userController.updateUsername.fulfilled,
       (state, action): UserState => {
         console.log(action.payload);
+        toast.info('Update username successfully!');
         clearCookie('Authentication');
 
         return {
@@ -105,6 +110,7 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.updateUsername.rejected,
       (state, action): UserState => {
+        toast.error('Update username unsuccessfully!');
         return {
           ...state,
           error: action.payload,
@@ -117,6 +123,7 @@ export const userSlice = createSlice({
       userController.updatePassword.fulfilled,
       (state, action): UserState => {
         console.log(action.payload);
+        toast.info('Update password successfully!');
         clearCookie('Authentication');
 
         return {
@@ -127,6 +134,7 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.updatePassword.rejected,
       (state, action): UserState => {
+        toast.error('Update password unsuccessfully!');
         return {
           ...state,
           error: action.payload,

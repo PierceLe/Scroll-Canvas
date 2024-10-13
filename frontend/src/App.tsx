@@ -10,6 +10,7 @@ import { Routes } from './react-routes/routes';
 
 import './index.css';
 import './App.css';
+import { Toast } from './components/toast';
 
 export default function App() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -28,6 +29,7 @@ export default function App() {
           <Routes pages={pages} />
         </BrowserRouter>
       </AuthProvider>
+      <Toast/>
     </Provider>
   );
 }
