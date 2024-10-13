@@ -11,7 +11,7 @@ const UserManagementPage = () => {
   const dispatch = useReduxDispatch();
 
   React.useEffect(() => {
-    dispatch(userController.getUsers());
+    dispatch(userController.getUsers({}));
   }, []);
 
   return <div className={classnames()}>
