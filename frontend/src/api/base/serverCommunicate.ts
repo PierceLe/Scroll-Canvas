@@ -21,7 +21,7 @@ export class ServerCommunicate implements IServerCommunicate {
         url: `${this.baseUrl}${url}`,
         headers: {
           ...options?.headers,
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + getCookie("Authentication"),
         },
         withCredentials: true,

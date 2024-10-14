@@ -13,10 +13,40 @@ export class ScrollingController {
     return ScrollingController.instance;
   }
 
-  public getScrollings = createAsyncThunk(
+  public getScrollings = createAsyncThunk<any, any>(
     'getScrollingsAPI',
-    async (_, { rejectWithValue }) => {
-      const fetchFn = this.scrollingService.getScrollings({});
+    async (data, { rejectWithValue }) => {
+      const fetchFn = this.scrollingService.getScrollings({ data });
+
+      try {
+        const response = await fetchFn();
+        return response;
+      } catch (err: any) {
+        return rejectWithValue(err.message);
+      }
+    },
+  );
+
+  public uploadScrolling = createAsyncThunk<any, any>(
+    'updateScrollingAPI',
+    async (data, { rejectWithValue }) => {
+      const fetchFn = this.scrollingService.uploadScrolling({
+        data,
+      });
+
+      try {
+        const response = await fetchFn();
+        return response;
+      } catch (err: any) {
+        return rejectWithValue(err.message);
+      }
+    },
+  );
+
+  public deleteScrolling = createAsyncThunk<any, any>(
+    'deleteScrollingAPI',
+    async (data, { rejectWithValue }) => {
+      const fetchFn = this.scrollingService.deleteScrolling(data.id, {});
 
       try {
         const response = await fetchFn();

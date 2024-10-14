@@ -11,9 +11,11 @@ import { ScrollingCard } from './scrollingCard';
 import { ScrollingPreview } from './scrollingPreview';
 import { ScrollingController } from '@frontend/handlers/scrolling';
 import { useReduxDispatch } from '@frontend/redux/hooks';
+import { FilterBlock } from './filterBlock';
 
 export const ScrollingCanvas = () => {
   const [isShowPreview, setIsShowPreview] = useState<boolean>(false);
+  const [id, setId] = useState<number>();
   const [title, setTitle] = useState<string>();
   const [createdBy, setCreatedBy] = useState<string>();
   const [date, setDate] = useState<string>();
@@ -24,7 +26,7 @@ export const ScrollingCanvas = () => {
   const dispatch = useReduxDispatch();
 
   useEffect(() => {
-    dispatch(scrollingController.getScrollings());
+    dispatch(scrollingController.getScrollings({}));
   }, []);
 
   const scrolls = [
@@ -52,7 +54,8 @@ export const ScrollingCanvas = () => {
   ];
 
   const handleShowPreview = (scrolling: any) => {
-    const { title, createdBy, date, url } = scrolling;
+    const { id, title, createdBy, date, url } = scrolling;
+    setId(id);
     setTitle(title);
     setCreatedBy(createdBy);
     setDate(date);
@@ -63,6 +66,9 @@ export const ScrollingCanvas = () => {
   return (
     <div className={classnames(styles.root)}>
       <div className={classnames(styles.title)}>List scrolling cards</div>
+      
+      <FilterBlock/>
+      
       <div className={classnames(styles.scrollWrap)}>
         {scrolls.map(scroll => {
           return (
@@ -82,6 +88,7 @@ export const ScrollingCanvas = () => {
       <ScrollingPreview
         isShowModal={isShowPreview}
         onClose={() => setIsShowPreview(false)}
+        id={id}
         title={title}
         createdBy={createdBy}
         url={url}

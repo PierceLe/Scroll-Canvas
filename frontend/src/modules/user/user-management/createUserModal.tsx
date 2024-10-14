@@ -13,13 +13,12 @@ import {
 } from '@frontend/tailwindcss-classnames';
 import { Button } from '@frontend/components/button';
 import { useReduxDispatch } from '@frontend/redux/hooks';
-import { AuthController } from '@frontend/handlers/auth';
 import { Icon } from '@frontend/components/icon';
-import { toast } from 'react-toastify';
+import { UserController } from '@frontend/handlers/user';
 
 export const CreateUserModal = () => {
   const dispatch = useReduxDispatch();
-  const authController = AuthController.getInstance();
+  const userController = UserController.getInstance();
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [firstName, setFirstName] = useState<string>();
@@ -59,9 +58,9 @@ export const CreateUserModal = () => {
     setIsShowPassword(!isShowPassword);
   };
 
-  const handleCreateUser = async () => {
-    await dispatch(
-      authController.register({
+  const handleCreateUser = () => {
+    dispatch(
+      userController.createUser({
         email,
         password,
         firstName,
@@ -70,9 +69,6 @@ export const CreateUserModal = () => {
         username,
       }),
     );
-    toast.info('Create user successfully!');
-
-    window.location.reload();
   };
 
   return (

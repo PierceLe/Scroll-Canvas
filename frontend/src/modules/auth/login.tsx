@@ -82,7 +82,7 @@ export const Login = () => {
     );
     if (data?.payload?.token) {
       toast.info('Login successfully!');
-      await sleep(1000);
+      await sleep(500);
       window.location.reload();
     }
   };
