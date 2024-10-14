@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { object, string } from 'yup';
 
 import { Button } from '@frontend/components/button';
 import { Input } from '@frontend/components/input';
@@ -44,36 +43,6 @@ export const Login = () => {
   };
 
   const handleLogin = async () => {
-    const userSchema = object({
-      username: string()
-        .length(8)
-        .matches(
-          /^[a-z0-9]+/,
-          'Your username must only contain digits and letters',
-        )
-        .required(),
-      password: string()
-        .min(8)
-        .max(16)
-        .matches(
-          /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,16}$/,
-          'Password must contain at least one digit, one uppercase and lowercase letter, one special character, and may include spaces or tabs',
-        )
-        .required(),
-    });
-
-    const userLogin = {
-      username,
-      password,
-    };
-
-    try {
-      await userSchema.validate(userLogin);
-    } catch (error: any) {
-      toast.error(error.message);
-      return;
-    }
-
     const data = await dispatch(
       authController.login({
         username,
