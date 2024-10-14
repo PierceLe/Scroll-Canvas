@@ -17,7 +17,7 @@ export const Input = (props: InputProps) => {
   return (
     <div className={classnames(classNames, styles.root)}>
       <input
-        className={classnames(styles.common, styles.size(size))}
+        className={classnames(styles.common(type), styles.size(size))}
         placeholder={placeholder}
         type={type}
         onChange={onChange}
@@ -31,12 +31,17 @@ export const Input = (props: InputProps) => {
 const useStyles = () => {
   return {
     root: classnames(position('relative')),
-    common: classnames(
-      borderRadius('rounded-xl'),
-      spacing('p-2'),
-      borders('border-2'),
-      sizing('w-full'),
-    ),
+    common: (type?: React.HTMLInputTypeAttribute) =>
+      classnames(
+        type !== 'file'
+          ? classnames(
+              spacing('p-2'),
+              borderRadius('rounded-xl'),
+              borders('border-2'),
+            )
+          : null,
+        sizing('w-full'),
+      ),
     size: (size: 'sm' | 'md' | 'lg') =>
       classnames(
         size === 'sm' ? classnames(sizing('h-4')) : null,

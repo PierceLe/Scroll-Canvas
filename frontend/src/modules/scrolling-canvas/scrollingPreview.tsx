@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import {
@@ -6,14 +7,18 @@ import {
   sizing,
   spacing,
   display,
-  justifyContent,
   gap,
+  justifyContent,
+  fill,
+  alignItems,
 } from '@frontend/tailwindcss-classnames';
 import { Button } from '@frontend/components/button';
 import { useAuthContext } from '../auth';
 import { ROLE_TYPE } from '@frontend/repositories';
 import { ReactPDF } from '@frontend/components/react-pdf';
-
+import { useReduxDispatch } from '@frontend/redux/hooks';
+import { ScrollingController } from '@frontend/handlers/scrolling';
+import { Icon } from '@frontend/components/icon';
 
 type ScrollingPreview = {
   isShowModal: boolean;
@@ -22,6 +27,7 @@ type ScrollingPreview = {
         event?: React.SyntheticEvent | KeyboardEvent | TouchEvent | MouseEvent,
       ) => void)
     | undefined;
+  id?: number;
   title?: string;
   createdBy?: string;
   createdByUsername?: string;
@@ -33,17 +39,29 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
   const {
     isShowModal,
     onClose,
+    id,
     title,
-    createdBy,
+    // createdBy,
     createdByUsername,
-    date,
+    // date,
     url,
   } = props;
   const { user } = useAuthContext();
 
+  const dispatch = useReduxDispatch();
+  const scrollController = ScrollingController.getInstance();
+
   const styles = useStyles();
 
-  const handleCreateUser = async () => {};
+  const handleDeleteScroll = () => {
+    dispatch(
+      scrollController.deleteScrolling({
+        id,
+      }),
+    );
+  };
+
+  const handleUpdateScroll = async () => {};
 
   return (
     <div>
@@ -53,6 +71,7 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
         closeOnDocumentClick
         onClose={onClose}
         open={isShowModal}
+        nested={true}
         className="w-900"
       >
         <div className="modal">
@@ -61,7 +80,7 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
           </div>
 
           <div className={classnames(styles.pdfPreviewWrap)}>
-            <ReactPDF url={url ?? ''}/>
+            <ReactPDF url={url ?? ''} />
           </div>
 
           <div className={`actions ${classnames(styles.action)}`}>
@@ -69,20 +88,61 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
               variant="contained"
               size="md"
               color="success"
-              onClick={handleCreateUser}
+              onClick={handleUpdateScroll}
             >
               Save
             </Button>
             {(user?.role === ROLE_TYPE.ADMIN ||
               user?.username === createdByUsername) && (
-              <Button
-                variant="contained"
-                size="md"
-                color="danger"
-                onClick={handleCreateUser}
+              <Popup
+                key="confirmDeleteModal"
+                modal={true}
+                trigger={
+                  <button>
+                    <Button variant="contained" size="md" color="danger">
+                      Delete
+                    </Button>
+                  </button>
+                }
               >
-                Delete
-              </Button>
+                {/** @ts-ignore */}
+                {close => (
+                  <div className="modal">
+                    <div className={classnames(styles.deleteWarn)}>
+                      <Icon
+                        classNames={classnames(styles.warnIcon)}
+                        type="warning"
+                      ></Icon>
+                      <div className={classnames(styles.deleteWarnTitle)}>
+                        Do you want to delete this scroll?
+                      </div>
+                    </div>
+
+                    <div
+                      className={`actions ${classnames(styles.deleteAction)}`}
+                    >
+                      <Button
+                        variant="contained"
+                        size="md"
+                        color="success"
+                        onClick={handleDeleteScroll}
+                      >
+                        OK
+                      </Button>
+                      <Button
+                        variant="contained"
+                        size="md"
+                        color="danger"
+                        onClick={() => {
+                          close();
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </Popup>
             )}
           </div>
         </div>
@@ -108,5 +168,21 @@ const useStyles = () => {
     ),
     icon: classnames(sizing('w-5', 'h-5')),
     pdfPreviewWrap: classnames(spacing('mb-4')),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    warnIcon: classnames(sizing('h-8', 'w-8'), fill('fill-yellow-500')),
+    deleteWarn: classnames(
+      display('flex'),
+      justifyContent('justify-center'),
+      alignItems('items-center'),
+      gap('gap-2'),
+      spacing('mb-6'),
+    ),
+    deleteWarnTitle: classnames(typography('text-tx22', 'font-bold')),
+    deleteAction: classnames(
+      display('flex'),
+      justifyContent('justify-center'),
+      gap('gap-2'),
+    ),
   };
 };

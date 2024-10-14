@@ -21,9 +21,11 @@ import 'reactjs-popup/dist/index.css';
 import { Button } from '@frontend/components/button';
 import { UserController } from '@frontend/handlers/user';
 import { FilterBlock } from './filterBlock';
+import { useAuthContext } from '@frontend/modules/auth';
 
 export const UserManagement = () => {
   const userController = UserController.getInstance();
+  const { user } = useAuthContext();
   const { userState } = useReduxSelector(['userState']);
   const dispatch = useReduxDispatch();
   const { users } = userState;
@@ -64,63 +66,68 @@ export const UserManagement = () => {
         return {
           id: row.id,
           username: row.username,
-        }
+        };
       },
       {
         id: 'action',
-        cell: info => (
-          <div className={classnames(styles.action)}>
-            <Popup
-              key="deleteUser"
-              trigger={
-                <button>
-                  <Icon
-                    classNames={classnames(styles.icon, styles.deleteIcon)}
-                    type="delete"
-                  ></Icon>
-                </button>
-              }
-              modal={true}
-              closeOnDocumentClick
-            >
-              {/** @ts-ignore */}
-              {close => (
-                <div className="modal">
-                  <div className={classnames(styles.deleteWarn)}>
+        cell: info =>
+          info.getValue().id !== user?.id ? (
+            <div className={classnames(styles.action)}>
+              <Popup
+                key="deleteUser"
+                trigger={
+                  <button>
                     <Icon
-                      classNames={classnames(styles.warnIcon)}
-                      type="warning"
+                      classNames={classnames(styles.icon, styles.deleteIcon)}
+                      type="delete"
                     ></Icon>
-                    <div className={classnames(styles.deleteWarnTitle)}>
-                      Do you want to delete this user?
+                  </button>
+                }
+                modal={true}
+                closeOnDocumentClick
+              >
+                {/** @ts-ignore */}
+                {close => (
+                  <div className="modal">
+                    <div className={classnames(styles.deleteWarn)}>
+                      <Icon
+                        classNames={classnames(styles.warnIcon)}
+                        type="warning"
+                      ></Icon>
+                      <div className={classnames(styles.deleteWarnTitle)}>
+                        Do you want to delete this user?
+                      </div>
+                    </div>
+
+                    <div
+                      className={`actions ${classnames(styles.deleteAction)}`}
+                    >
+                      <Button
+                        variant="contained"
+                        size="md"
+                        color="success"
+                        onClick={() =>
+                          handleDeleteUser(info.getValue().username)
+                        }
+                      >
+                        OK
+                      </Button>
+                      <Button
+                        variant="contained"
+                        size="md"
+                        color="danger"
+                        onClick={() => {
+                          close();
+                        }}
+                      >
+                        Cancel
+                      </Button>
                     </div>
                   </div>
-
-                  <div className={`actions ${classnames(styles.deleteAction)}`}>
-                    <Button
-                      variant="contained"
-                      size="md"
-                      color="success"
-                      onClick={() => handleDeleteUser(info.getValue().username)}
-                    >
-                      OK
-                    </Button>
-                    <Button
-                      variant="contained"
-                      size="md"
-                      color="danger"
-                      onClick={() => {
-                        close();
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </Popup>
-          </div>
-        ),
+                )}
+              </Popup>
+            </div>
+          ) : null,
         header: () => (
           <div className={classnames(styles.actionHeader)}>Action</div>
         ),
@@ -131,8 +138,8 @@ export const UserManagement = () => {
     <div className={classnames(styles.root)}>
       <div className={classnames(styles.title)}>List users</div>
 
-      <FilterBlock/>
-      
+      <FilterBlock />
+
       <Table
         data={users ?? []}
         columns={columns}

@@ -117,7 +117,7 @@ export const Register = () => {
     );
     if (data?.payload?.token) {
       toast.info('Register successfully!');
-      await sleep(1000);
+      await sleep(500);
       navigate(PAGE_LINKS.LOGIN.path);
     }
   };

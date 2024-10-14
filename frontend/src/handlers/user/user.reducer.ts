@@ -9,6 +9,7 @@ const userController = UserController.getInstance();
 
 const initialState: UserState = {
   currentUser: {},
+  users: []
 };
 
 export const userSlice = createSlice({
@@ -64,6 +65,33 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.getUsers.rejected,
       (state, action): UserState => {
+        return {
+          ...state,
+          error: action.payload,
+        };
+      },
+    );
+
+    // CreateUserAPI
+    builder.addCase(
+      userController.createUser.fulfilled,
+      (state, action): UserState => {
+        console.log(action.payload);
+        toast.info('Create user successfully!');
+
+        return {
+          ...state,
+          users: [
+            User.buildUser(action.payload), 
+            ...state.users ?? [],
+          ],
+        };
+      },
+    );
+    builder.addCase(
+      userController.createUser.rejected,
+      (state, action): UserState => {
+        toast.error('Create user unsuccessfully!');
         return {
           ...state,
           error: action.payload,

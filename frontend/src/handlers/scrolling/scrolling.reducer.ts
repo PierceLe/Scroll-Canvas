@@ -4,7 +4,7 @@ import { ScrollingController } from './scrolling.controller';
 const scrollingController = ScrollingController.getInstance();
 
 const initialState: any = {
-  scrollings: []
+  scrollings: [],
 };
 
 export const userSlice = createSlice({
@@ -24,6 +24,26 @@ export const userSlice = createSlice({
     );
     builder.addCase(
       scrollingController.getScrollings.rejected,
+      (state, action) => {
+        return {
+          ...state,
+          error: action.payload,
+        };
+      },
+    );
+
+    // DeleteScrollAPI
+    builder.addCase(
+      scrollingController.deleteScrolling.fulfilled,
+      (state, action) => {
+        console.log(action.payload);
+        return {
+          ...state,
+        };
+      },
+    );
+    builder.addCase(
+      scrollingController.deleteScrolling.rejected,
       (state, action) => {
         return {
           ...state,

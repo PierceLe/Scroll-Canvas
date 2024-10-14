@@ -34,7 +34,7 @@ const NavigationItem = (props: { title: string; path: string }) => {
   const styles = useNavigationItemStyles();
 
   return (
-    <Link className={classnames(styles.root)} to={path}>
+    <Link className={classnames(styles.root(path === window.location.pathname))} to={path}>
       {title}
     </Link>
   );
@@ -53,11 +53,17 @@ const useStyles = () => {
 
 const useNavigationItemStyles = () => {
   return {
-    root: classnames(
-      spacing('py-2', 'px-4'),
-      typography('text-gray-600', 'text-tx18', 'hover:text-primary-color'),
-      backgroundColor('hover:bg-gray-100'),
-      borderRadius('rounded-3xl'),
-    ),
+    root: (isActive: boolean) =>
+      classnames(
+        spacing('py-2', 'px-4'),
+        typography(
+          'text-gray-600',
+          'text-tx18',
+          'hover:text-primary-color',
+          isActive ? 'text-primary-color' : null,
+        ),
+        backgroundColor('hover:bg-gray-100'),
+        borderRadius('rounded-3xl'),
+      ),
   };
 };

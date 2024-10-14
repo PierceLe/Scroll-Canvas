@@ -1,9 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { UserService } from '@frontend/api/user';
+import { AuthService } from '@frontend/api/auth';
 
 export class UserController {
   private static instance: UserController;
   private userService: UserService = UserService.getInstance();
+  private authService: AuthService = AuthService.getInstance();
 
   public static getInstance(): UserController {
     if (!UserController.instance) {
@@ -90,6 +92,22 @@ export class UserController {
           oldPassword: data?.oldPassword,
           newPassword: data?.newPassword,
         },
+      });
+
+      try {
+        const response = await fetchFn();
+        return response;
+      } catch (err: any) {
+        return rejectWithValue(err.message);
+      }
+    },
+  );
+
+  public createUser = createAsyncThunk<any, any>(
+    'createUserAPI',
+    async (data, { rejectWithValue }) => {
+      const fetchFn = this.authService.register({
+        data
       });
 
       try {

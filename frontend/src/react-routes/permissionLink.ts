@@ -20,7 +20,7 @@ export const PAGE_LINKS = {
     roles: 'all'
   },
   HOME: {
-    path: '/home',
+    path: '/',
     title: 'Home',
     isWithLayout: true,
     roles: 'all'
