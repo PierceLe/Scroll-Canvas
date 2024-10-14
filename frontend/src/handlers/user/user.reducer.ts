@@ -103,11 +103,20 @@ export const userSlice = createSlice({
     builder.addCase(
       userController.updateUser.fulfilled,
       (state, action): UserState => {
-        console.log(action.payload);
         toast.info('Update user successfully!');
+
+        const currentUser = state.currentUser?.data
+        if (currentUser) {
+          currentUser.firstName = action.payload.firstName
+          currentUser.lastName = action.payload.lastName
+        }
 
         return {
           ...state,
+          currentUser: {
+            ...state.currentUser,
+            data: currentUser
+          }
         };
       },
     );
