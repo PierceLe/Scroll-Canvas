@@ -59,6 +59,9 @@ export const authSlice = createSlice({
       (state, action): AuthState => {
         const token = action.payload.token;
         setCookie('Authentication', token);
+
+        // Reset login attempts
+        localStorage.setItem('numOfAttemptsLogin', "0");
         
         return {
           ...state,
@@ -69,6 +72,21 @@ export const authSlice = createSlice({
       authController.login.rejected,
       (state, action): AuthState => {
         toast.error('Login unsuccessfully!');
+
+        // Increment password attempt
+        const numOfAttemptsLogin = Number(localStorage.getItem('numOfAttemptsLogin'));
+        const latestAttemptsLogin = Number(localStorage.getItem(
+          'latestAttemptsLogin',
+        ));
+
+        // Reset count if latest attempt more than 15 minutes, else increse 1
+        if (Date.now() - latestAttemptsLogin > 900000) {
+          localStorage.setItem('numOfAttemptsLogin', "1");
+        } else {
+          localStorage.setItem('numOfAttemptsLogin', String(numOfAttemptsLogin+1));
+        }
+        localStorage.setItem('latestAttemptsLogin', String(Date.now()));
+
 
         return {
           ...state,

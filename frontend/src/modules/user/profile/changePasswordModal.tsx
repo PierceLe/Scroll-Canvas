@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -29,35 +29,40 @@ export const ChangePasswordModal = () => {
   const [repeatNewPassword, setRepeatNewPassword] = useState<string>();
   const [isShowOldPassword, setIsShowOldPassword] = useState<boolean>();
   const [isShowNewPassword, setIsShowNewPassword] = useState<boolean>();
-  const [isShowRepeatNewPassword, setIsShowRepeatNewPassword] = useState<boolean>();
+  const [isShowRepeatNewPassword, setIsShowRepeatNewPassword] =
+    useState<boolean>();
 
+  const [isReachableMaxAttempts, setIsReachableMaxAttempts] =
+    useState<boolean>();
 
   const [isChange, setIsChange] = useState<boolean>(false);
   const styles = useStyles();
 
-  // Check for update attempts
-  const [oldPasswordAttempts, setOldPasswordAttempts] = useState<number>(0);
-  const [isOldPasswordInputDisabled, setIsOldPasswordInputDisabled] = useState<boolean>(false);
-  const MAX_ATTEMPTS = 3;
+  useEffect(() => {
+    checkIsReachableMaxAttempts();
+  }, []);
+
+  const checkIsReachableMaxAttempts = () => {
+    const numOfAttemptsChangePassword = localStorage.getItem(
+      'numOfAttemptsChangePassword',
+    );
+    const latestAttemptsChangePassword = localStorage.getItem(
+      'latestAttemptsChangePassword',
+    );
+
+    const now = Date.now();
+
+    // Check if attempt login more than 3 in 15 minutes
+    if (
+      Number(numOfAttemptsChangePassword) >= 3 &&
+      now - Number(latestAttemptsChangePassword) < 900000
+    ) {
+      setIsReachableMaxAttempts(true);
+    }
+  };
 
   const handleOldPassword = (e: any) => {
     setOldPassword(e.target.value);
-
-    if (isOldPasswordInputDisabled){
-      toast.error('You have reached the maximum number of attempts for entering the old password.');
-      return;
-    }
-
-    setOldPasswordAttempts((prevAttempts) => {
-      const newAttempts = prevAttempts + 1;
-      return newAttempts; });
-
-    // If attempts reach the maximum limit, disable the input and update button
-    if (oldPasswordAttempts >= MAX_ATTEMPTS) {
-      setIsOldPasswordInputDisabled(true);
-    } else {
-      toast('Incorrect old password.')
-    }
 
     // Check if we should allow to update password
     if (!isChange) {
@@ -68,10 +73,6 @@ export const ChangePasswordModal = () => {
   const handleNewPassword = (e: any) => {
     setNewPassword(e.target.value);
 
-    if (isOldPasswordInputDisabled){
-      return;
-    }
-
     if (!isChange) {
       setIsChange(true);
     }
@@ -80,23 +81,18 @@ export const ChangePasswordModal = () => {
   const handleRepeatNewPassword = (e: any) => {
     setRepeatNewPassword(e.target.value);
 
-    if (isOldPasswordInputDisabled){
-      return;
-    }
-
     if (!isChange) {
       setIsChange(true);
     }
   };
 
   const handleUpdatePassword = async () => {
-
-
     if (newPassword !== repeatNewPassword) {
-      alert('Repeat password dont match');
+      toast.warn('Repeat password dont match');
+      return;
     }
 
-    await dispatch(
+    const data = await dispatch(
       userController.updatePassword({
         id: currentUser.data?.id,
         oldPassword: oldPassword,
@@ -104,8 +100,12 @@ export const ChangePasswordModal = () => {
       }),
     );
 
-    navigate(PAGE_LINKS.HOME.path);
-    window.location.reload();
+    if (data?.meta?.requestStatus === 'fulfilled') {
+      navigate(PAGE_LINKS.HOME.path);
+      window.location.reload();
+    } else {
+      checkIsReachableMaxAttempts();
+    }
   };
 
   const handleShowOldPassword = () => {
@@ -136,6 +136,13 @@ export const ChangePasswordModal = () => {
             <span>*</span> After change password successfully, you will be
             redirected to home
           </div>
+          {isReachableMaxAttempts ? (
+            <div className={classnames(styles.note)}>
+              <span>*</span>
+              You have exceeded the maximum number of password change attempts.
+              Please wait to 15 minutes
+            </div>
+          ) : null}
           <Input
             size="lg"
             placeholder="Enter your old password"
@@ -150,6 +157,7 @@ export const ChangePasswordModal = () => {
                 onClick={handleShowOldPassword}
               />
             }
+            disabled={isReachableMaxAttempts}
           />
           <Input
             size="lg"
@@ -165,6 +173,7 @@ export const ChangePasswordModal = () => {
                 onClick={handleShowNewPassword}
               />
             }
+            disabled={isReachableMaxAttempts}
           />
           <Input
             size="lg"
@@ -180,6 +189,7 @@ export const ChangePasswordModal = () => {
                 onClick={handleShowRepeatNewPassword}
               />
             }
+            disabled={isReachableMaxAttempts}
           />
           <div className="actions">
             <Button
@@ -187,7 +197,7 @@ export const ChangePasswordModal = () => {
               size="md"
               color="success"
               onClick={handleUpdatePassword}
-              disabled={!isChange}
+              disabled={!isChange || isReachableMaxAttempts}
             >
               Update
             </Button>

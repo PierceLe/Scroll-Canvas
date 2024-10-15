@@ -9,7 +9,7 @@ const userController = UserController.getInstance();
 
 const initialState: UserState = {
   currentUser: {},
-  users: []
+  users: [],
 };
 
 export const userSlice = createSlice({
@@ -81,10 +81,7 @@ export const userSlice = createSlice({
 
         return {
           ...state,
-          users: [
-            User.buildUser(action.payload), 
-            ...state.users ?? [],
-          ],
+          users: [User.buildUser(action.payload), ...(state.users ?? [])],
         };
       },
     );
@@ -105,18 +102,18 @@ export const userSlice = createSlice({
       (state, action): UserState => {
         toast.info('Update user successfully!');
 
-        const currentUser = state.currentUser?.data
+        const currentUser = state.currentUser?.data;
         if (currentUser) {
-          currentUser.firstName = action.payload.firstName
-          currentUser.lastName = action.payload.lastName
+          currentUser.firstName = action.payload.firstName;
+          currentUser.lastName = action.payload.lastName;
         }
 
         return {
           ...state,
           currentUser: {
             ...state.currentUser,
-            data: currentUser
-          }
+            data: currentUser,
+          },
         };
       },
     );
@@ -161,6 +158,11 @@ export const userSlice = createSlice({
       (state, action): UserState => {
         console.log(action.payload);
         toast.info('Update password successfully!');
+
+        // Reset change password attempts
+        localStorage.setItem('numOfAttemptsChangePassword', "0");
+
+        // Logout
         clearCookie('Authentication');
 
         return {
@@ -172,6 +174,21 @@ export const userSlice = createSlice({
       userController.updatePassword.rejected,
       (state, action): UserState => {
         toast.error('Update password unsuccessfully!');
+
+        // Increment password attempt
+        const numOfAttemptsChangePassword = Number(localStorage.getItem('numOfAttemptsChangePassword'));
+        const latestAttemptsChangePassword = Number(localStorage.getItem(
+          'latestAttemptsChangePassword',
+        ));
+
+        // Reset count if latest attempt more than 15 minutes, else increse 1
+        if (Date.now() - latestAttemptsChangePassword > 900000) {
+          localStorage.setItem('numOfAttemptsChangePassword', "1");
+        } else {
+          localStorage.setItem('numOfAttemptsChangePassword', String(numOfAttemptsChangePassword+1));
+        }
+        localStorage.setItem('latestAttemptsChangePassword', String(Date.now()));
+
         return {
           ...state,
           error: action.payload,
