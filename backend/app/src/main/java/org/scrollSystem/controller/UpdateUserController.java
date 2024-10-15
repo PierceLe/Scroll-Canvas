@@ -22,8 +22,14 @@ public class UpdateUserController {
     // API for update user information like lastName, ...
     @PutMapping("/user/{user_id}")
     public ResponseEntity<DefaultResponse<String>> update(@RequestBody @Valid UserUpdateRequest request,
-                                                           @PathVariable String user_id) {
-        return DefaultResponse.success(userUpdateService.update(request, user_id));
+                                                          @PathVariable String user_id) {
+        try {
+            String response = userUpdateService.update(request, user_id);
+            return DefaultResponse.success(response);
+        }
+        catch (Exception e) {
+            return DefaultResponse.error(e.getMessage());
+        }
     }
 
     // API for update the password
@@ -32,6 +38,12 @@ public class UpdateUserController {
             @PathVariable String user_id,
             @RequestBody @Valid UpdatePasswordRequest request
     ) {
-        return DefaultResponse.success(userUpdateService.updatePassword(user_id, request));
+        try {
+            String response = userUpdateService.updatePassword(user_id, request);
+            return DefaultResponse.success(response);
+        }
+        catch (Exception e) {
+            return DefaultResponse.error(e.getMessage());
+        }
     }
 }

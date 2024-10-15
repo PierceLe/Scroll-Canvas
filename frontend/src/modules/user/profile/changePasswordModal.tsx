@@ -15,6 +15,7 @@ import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
 import { UserController } from '@frontend/handlers/user';
 import { PAGE_LINKS } from '@frontend/react-routes/permissionLink';
 import { Icon } from '@frontend/components/icon';
+import { toast } from 'react-toastify';
 
 export const ChangePasswordModal = () => {
   const navigate = useNavigate();
@@ -30,12 +31,35 @@ export const ChangePasswordModal = () => {
   const [isShowNewPassword, setIsShowNewPassword] = useState<boolean>();
   const [isShowRepeatNewPassword, setIsShowRepeatNewPassword] = useState<boolean>();
 
+
   const [isChange, setIsChange] = useState<boolean>(false);
   const styles = useStyles();
+
+  // Check for update attempts
+  const [oldPasswordAttempts, setOldPasswordAttempts] = useState<number>(0);
+  const [isOldPasswordInputDisabled, setIsOldPasswordInputDisabled] = useState<boolean>(false);
+  const MAX_ATTEMPTS = 3;
 
   const handleOldPassword = (e: any) => {
     setOldPassword(e.target.value);
 
+    if (isOldPasswordInputDisabled){
+      toast.error('You have reached the maximum number of attempts for entering the old password.');
+      return;
+    }
+
+    setOldPasswordAttempts((prevAttempts) => {
+      const newAttempts = prevAttempts + 1;
+      return newAttempts; });
+
+    // If attempts reach the maximum limit, disable the input and update button
+    if (oldPasswordAttempts >= MAX_ATTEMPTS) {
+      setIsOldPasswordInputDisabled(true);
+    } else {
+      toast('Incorrect old password.')
+    }
+
+    // Check if we should allow to update password
     if (!isChange) {
       setIsChange(true);
     }
@@ -43,6 +67,10 @@ export const ChangePasswordModal = () => {
 
   const handleNewPassword = (e: any) => {
     setNewPassword(e.target.value);
+
+    if (isOldPasswordInputDisabled){
+      return;
+    }
 
     if (!isChange) {
       setIsChange(true);
@@ -52,12 +80,18 @@ export const ChangePasswordModal = () => {
   const handleRepeatNewPassword = (e: any) => {
     setRepeatNewPassword(e.target.value);
 
+    if (isOldPasswordInputDisabled){
+      return;
+    }
+
     if (!isChange) {
       setIsChange(true);
     }
   };
 
   const handleUpdatePassword = async () => {
+
+
     if (newPassword !== repeatNewPassword) {
       alert('Repeat password dont match');
     }

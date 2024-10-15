@@ -9,6 +9,7 @@ import org.scrollSystem.request.AuthenticationRequest;
 import org.scrollSystem.request.RegisterRequest;
 import org.scrollSystem.response.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
+import org.scrollSystem.response.UserResponse;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,10 +25,10 @@ public class UserAuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-//    private final AuthenticationManager authenticationManager;
+    //    private final AuthenticationManager authenticationManager;
     private final ApplicationConfig applicationConfig;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public UserResponse register(RegisterRequest request) {
         Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
         if (optionalUser.isPresent()) {
             throw new ValidationException("Email have been existed");
@@ -50,10 +51,16 @@ public class UserAuthenticationService {
                 .phone(request.getPhone())
                 .build();
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
+        UserResponse userResponse = UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .role(user.getRole())
+                .phone(user.getPhone())
                 .build();
+        return userResponse;
     }
 
 
@@ -67,9 +74,7 @@ public class UserAuthenticationService {
 
         // Check the hash input
         if (!hashInputPassword.equals(user.getPassword()))
-            return AuthenticationResponse.builder()
-                    .token("user enter wrong password")
-                    .build();
+            throw new ValidationException("Wrong Password");
 
 
         // Generate a token if the user logins successfully

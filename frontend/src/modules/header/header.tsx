@@ -68,7 +68,7 @@ export const Header = () => {
             <>
               <div className={classnames(styles.profileWrap)}>
                 <img
-                  src="../../../public/react.png"
+                  src="../../../public/defaultAvatar.jpg"
                   className={classnames(styles.avatar)}
                 />
                 <div className={classnames(styles.name)}>{user?.firstName}</div>

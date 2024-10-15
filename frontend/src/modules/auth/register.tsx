@@ -68,27 +68,38 @@ export const Register = () => {
 
   const handleSignUp = async () => {
     const userSchema = object({
+      firstName: string()
+      .matches(
+        /^[A-Za-z\s]+$/,
+        'First name must contain only letters'
+      )
+      .required(),
+      lastName: string()
+      .matches(
+        /^[A-Za-z\s]+$/,
+        'Last name must contain only letters'
+      )
+      .required(),
       username: string()
         .length(8)
         .matches(
           /^[a-z0-9]+/,
-          'Your username must only contain digits and letters',
+          'Your username must only contain digits and lowercase letters',
         )
         .required(),
       password: string()
         .min(8)
         .max(16)
         .matches(
-          /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,16}$/,
+          /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_\s\t]).{8,16}$/,
           'Password must contain at least one digit, one uppercase and lowercase letter, one special character, and may include spaces or tabs',
         )
         .required(),
-      email: string().email().required(),
-      firstName: string().required(),
-      lastName: string().required(),
       phone: string().required(),
+      email: string().email().required(),
     });
 
+    
     const userLogin = {
       email,
       password,
@@ -117,7 +128,7 @@ export const Register = () => {
     );
     if (data?.payload?.token) {
       toast.info('Register successfully!');
-      await sleep(500);
+      await sleep(1000);
       navigate(PAGE_LINKS.LOGIN.path);
     }
   };

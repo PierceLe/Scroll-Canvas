@@ -54,18 +54,18 @@ public class UserUpdateService {
 
         // Check for email
         if (Objects.nonNull(request.getEmail()))
-           user.setEmail(request.getEmail());
+            user.setEmail(request.getEmail());
 
 
         if (Objects.nonNull(request.getUsername())) {
             // Check for username
             Optional<User> username = userRepository.findByUsername(request.getUsername());
-           
+
             if (username.isPresent())
-                return "The new username is already taken";
+                throw new ValidationException("The new username is already taken");
             user.setUsername(request.getUsername());
         }
-            
+
 
 
         // Check for phone number

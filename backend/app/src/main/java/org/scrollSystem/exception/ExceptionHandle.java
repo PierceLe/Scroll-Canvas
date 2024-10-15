@@ -45,7 +45,7 @@ public class ExceptionHandle {
         return new ResponseEntity<>(DefaultResponse.<Object>builder()
                 .success(Boolean.FALSE)
                 .message("Required header param " + exception.getHeaderName())
-                .build(), HttpStatus.OK);
+                .build(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)

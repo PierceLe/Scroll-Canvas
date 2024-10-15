@@ -35,7 +35,13 @@ public class UserController {
     public ResponseEntity<DefaultResponse<String>> deleteUser (
             @PathVariable @NotNull String usernamme
     ) {
-        return DefaultResponse.success(userService.delete(usernamme));
+        try {
+            String response = userService.delete(usernamme);
+            return DefaultResponse.success(response);
+        }
+        catch (Exception e) {
+            return DefaultResponse.error(e.getMessage());
+        }
     }
 
 
@@ -51,6 +57,12 @@ public class UserController {
     public ResponseEntity<DefaultResponse<String>> checkExistingUsername(
             @RequestParam String username
     ) {
-        return DefaultResponse.success(userService.checkExistingUsername(username));
+        try {
+            String response = userService.checkExistingUsername(username);
+            return DefaultResponse.success(response);
+        }
+        catch (Exception e) {
+            return DefaultResponse.error(e.getMessage());
+        }
     }
 }

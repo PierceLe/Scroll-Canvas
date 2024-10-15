@@ -32,25 +32,25 @@ export const ScrollingCanvas = () => {
   const scrolls = [
     {
       title:
-        'ScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScrollScroll',
+        'Scroll',
       createdBy: 'Nelson',
       date: '2017-04-04',
-      url: '/Mark Grover_ Ted Malaska_ Jonathan Seidman_ Gwen Shapira - Hadoop Application Architectures Designing Real-World Big Data Applications-O’Reilly Media (2015).pdf'
+      url: '/pdf_test.pdf'
     },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Nelson', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
+    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
   ];
 
   const handleShowPreview = (scrolling: any) => {

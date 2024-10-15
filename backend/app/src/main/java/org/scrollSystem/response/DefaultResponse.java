@@ -37,7 +37,7 @@ public class DefaultResponse<T> {
         return new ResponseEntity<>(DefaultResponse.<T>builder()
                 .success(false)
                 .message(message)
-                .build(), HttpStatus.OK);
+                .build(), HttpStatus.FORBIDDEN);
     }
 
     public static <T> ResponseEntity<DefaultResponse<T>> errorAccessDeny(String message) {

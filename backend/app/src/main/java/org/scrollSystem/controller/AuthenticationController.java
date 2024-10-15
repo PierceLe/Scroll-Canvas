@@ -6,6 +6,7 @@ import org.scrollSystem.request.AuthenticationRequest;
 import org.scrollSystem.request.RegisterRequest;
 import org.scrollSystem.response.AuthenticationResponse;
 import org.scrollSystem.response.DefaultResponse;
+import org.scrollSystem.response.UserResponse;
 import org.scrollSystem.service.UserAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,16 @@ public class AuthenticationController {
 
     // API for registering an account
     @PostMapping("/register")
-    public ResponseEntity<DefaultResponse<AuthenticationResponse>> register(
+    public ResponseEntity<DefaultResponse<UserResponse>> register(
             @RequestBody @Valid RegisterRequest request
     ) {
-        return DefaultResponse.success(userAuthenticationService.register(request));
+        try {
+            UserResponse userResponse = userAuthenticationService.register(request);
+            return DefaultResponse.success(userResponse);
+        }
+        catch (Exception e) {
+            return DefaultResponse.error(e.getMessage());
+        }
     }
 
     // API for login account
@@ -31,6 +38,12 @@ public class AuthenticationController {
     public ResponseEntity<DefaultResponse<AuthenticationResponse>> login(
             @RequestBody AuthenticationRequest request
     ) {
-        return DefaultResponse.success(userAuthenticationService.login(request));
+        try {
+            AuthenticationResponse response = userAuthenticationService.login(request);
+            return DefaultResponse.success(response);
+        }
+        catch (Exception e) {
+            return DefaultResponse.error(e.getMessage());
+        }
     }
 }

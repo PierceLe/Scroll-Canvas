@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { object, string } from 'yup';
 
 import { Button } from '@frontend/components/button';
 import { Input } from '@frontend/components/input';
@@ -30,6 +31,10 @@ export const Login = () => {
   const [password, setPassword] = useState();
   const [isShowPassword, setIsShowPassword] = useState<boolean>();
 
+  // Track the number of attempts
+  const [attempts, setAttempts] = useState(0);
+  const maxAttempts = 3;
+
   const handleUsername = (e: any) => {
     setUsername(e.target.value);
   };
@@ -43,16 +48,43 @@ export const Login = () => {
   };
 
   const handleLogin = async () => {
+    const userSchema = object({
+      username: string().required(),
+      password: string().required(),
+    });
+
+    const userLogin = {
+      username,
+      password,
+    };
+
+    try {
+      await userSchema.validate(userLogin);
+    } catch (error: any) {
+      toast.error(error.message);
+      return;
+    }
+
     const data = await dispatch(
       authController.login({
         username,
         password,
       }),
     );
+
+    //Verify for password authentication
     if (data?.payload?.token) {
       toast.info('Login successfully!');
-      await sleep(500);
+      await sleep(1000);
       window.location.reload();
+    } else if (attempts >= maxAttempts) {
+      // Check if the three attempts has been reached
+      toast.error("You have reached the maximum number of login attempts. Please try again later.")
+    }
+    else {
+      // Increment the variable attempts on failed login
+      setAttempts(prev => prev + 1);
+      toast.error("Login failed! Incorrect username or password. Type the correct username and password, and try again.");
     }
   };
 
