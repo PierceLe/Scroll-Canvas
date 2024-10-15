@@ -43,8 +43,4 @@ public class RegisterRequest {
     @NotNull(message = "Phone number can not be empty")
     @NotBlank(message = "Phone number can not be empty")
     private String phone;
-
-//    @NotNull(message = "salt can not be null")
-//    @NotBlank(message = "salt can not be empty")
-    private String salt;
 }
