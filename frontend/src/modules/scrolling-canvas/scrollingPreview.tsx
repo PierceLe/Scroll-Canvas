@@ -53,12 +53,15 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
 
   const styles = useStyles();
 
-  const handleDeleteScroll = () => {
+  const handleDeleteScroll = (closeConfirmDelete: any) => {
     dispatch(
       scrollController.deleteScrolling({
         id,
       }),
     );
+
+    closeConfirmDelete()
+    if (onClose) onClose();
   };
 
   const handleUpdateScroll = async () => {};
@@ -125,7 +128,7 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
                         variant="contained"
                         size="md"
                         color="success"
-                        onClick={handleDeleteScroll}
+                        onClick={() => handleDeleteScroll(close)}
                       >
                         OK
                       </Button>

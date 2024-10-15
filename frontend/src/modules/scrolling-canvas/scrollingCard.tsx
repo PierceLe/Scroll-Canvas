@@ -8,6 +8,7 @@ import classnames, {
   spacing,
   typography,
 } from '@frontend/tailwindcss-classnames';
+import { convertDateToString } from '@frontend/utils/date';
 
 type ScrollingCardProps = {
   title: string;
@@ -32,7 +33,7 @@ export const ScrollingCard = (props: ScrollingCardProps) => {
         <div>
           by <span className={classnames(styles.createdBy)}>{createdBy}</span>
         </div>
-        <div>{date}</div>
+        <div>{convertDateToString((new Date(date)), 'DD-MM-YYYY')}</div>
       </div>
     </div>
   );

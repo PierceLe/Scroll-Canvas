@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ScrollingController } from './scrolling.controller';
+import { toast } from 'react-toastify';
 
 const scrollingController = ScrollingController.getInstance();
 
@@ -7,10 +8,21 @@ const initialState: any = {
   scrollings: [],
 };
 
-export const userSlice = createSlice({
+export const scrollSlice = createSlice({
   name: 'userSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    createScrollSuccess: (state, action) => {
+      console.log(action)
+      return {
+        ...state,
+        scrollings: [
+          action.payload,
+          ...state.scrollings
+        ]
+      };
+    },
+  },
   extraReducers: builder => {
     // GetScrollingsAPI
     builder.addCase(
@@ -36,6 +48,7 @@ export const userSlice = createSlice({
     builder.addCase(
       scrollingController.deleteScrolling.fulfilled,
       (state, action) => {
+        toast.info('Delete scroll successfully!');
         console.log(action.payload);
         return {
           ...state,
@@ -45,6 +58,7 @@ export const userSlice = createSlice({
     builder.addCase(
       scrollingController.deleteScrolling.rejected,
       (state, action) => {
+        toast.error('Delete scroll unsuccessfully!');
         return {
           ...state,
           error: action.payload,
@@ -55,5 +69,5 @@ export const userSlice = createSlice({
 });
 
 // eslint-disable-next-line no-empty-pattern
-export const {} = userSlice.actions;
-export const { reducer: userReducer } = userSlice;
+export const { createScrollSuccess } = scrollSlice.actions;
+export const { reducer: scrollReducer } = scrollSlice;

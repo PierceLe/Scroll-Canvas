@@ -10,10 +10,15 @@ import classnames, {
 import { ScrollingCard } from './scrollingCard';
 import { ScrollingPreview } from './scrollingPreview';
 import { ScrollingController } from '@frontend/handlers/scrolling';
-import { useReduxDispatch } from '@frontend/redux/hooks';
+import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
 import { FilterBlock } from './filterBlock';
 
 export const ScrollingCanvas = () => {
+  const scrollingController = ScrollingController.getInstance();
+  const dispatch = useReduxDispatch();
+  const { scrollState } = useReduxSelector(['scrollState']);
+  const { scrollings } = scrollState;
+
   const [isShowPreview, setIsShowPreview] = useState<boolean>(false);
   const [id, setId] = useState<number>();
   const [title, setTitle] = useState<string>();
@@ -22,44 +27,18 @@ export const ScrollingCanvas = () => {
   const [url, setUrl] = useState<string>();
   const styles = useStyles();
 
-  const scrollingController = ScrollingController.getInstance();
-  const dispatch = useReduxDispatch();
-
   useEffect(() => {
     dispatch(scrollingController.getScrollings({}));
   }, []);
 
-  const scrolls = [
-    {
-      title:
-        'Scroll',
-      createdBy: 'Nelson',
-      date: '2017-04-04',
-      url: '/pdf_test.pdf'
-    },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-    { title: 'Scroll', createdBy: 'Binh Minh Tran', date: '2017-04-04' },
-  ];
 
   const handleShowPreview = (scrolling: any) => {
-    const { id, title, createdBy, date, url } = scrolling;
-    setId(id);
+    const { fileId, title, owner, uploadDate, filePath } = scrolling;
+    setId(fileId);
     setTitle(title);
-    setCreatedBy(createdBy);
-    setDate(date);
-    setUrl(url)
+    setCreatedBy(owner?.firstName);
+    setDate(uploadDate);
+    setUrl(filePath)
     setIsShowPreview(true);
   };
 
@@ -70,7 +49,7 @@ export const ScrollingCanvas = () => {
       <FilterBlock/>
       
       <div className={classnames(styles.scrollWrap)}>
-        {scrolls.map(scroll => {
+        {scrollings.map((scroll: any) => {
           return (
             <div
               className={classnames(styles.scrollCard)}
@@ -78,8 +57,8 @@ export const ScrollingCanvas = () => {
             >
               <ScrollingCard
                 title={scroll.title}
-                createdBy={scroll.createdBy}
-                date={scroll.date}
+                createdBy={scroll.owner?.firstName}
+                date={scroll.uploadDate}
               />
             </div>
           );

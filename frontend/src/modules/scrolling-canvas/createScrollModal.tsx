@@ -12,13 +12,14 @@ import {
   justifyContent,
 } from '@frontend/tailwindcss-classnames';
 import { Button } from '@frontend/components/button';
-// import { useReduxDispatch } from '@frontend/redux/hooks';
+import { useReduxDispatch } from '@frontend/redux/hooks';
 import { toast } from 'react-toastify';
 // import { ScrollingController } from '@frontend/handlers/scrolling';
 import { getCookie } from '@frontend/helpers/cookie';
+import { createScrollSuccess } from '@frontend/handlers/scrolling';
 
 export const CreateScrollModal = () => {
-  // const dispatch = useReduxDispatch();
+  const dispatch = useReduxDispatch();
   // const scrollController = ScrollingController.getInstance();
   const [title, setTitle] = useState<string>();
   const [file, setFile] = useState<any>();
@@ -54,9 +55,10 @@ export const CreateScrollModal = () => {
       headers: {
         Authorization: 'Bearer ' + getCookie('Authentication'),
       },
-    }).then(response => {
-      console.log(response);
+    }).then(async (response) => {
+      const res = await response.json();
       toast.info('Create scroll successfully!');
+      dispatch(createScrollSuccess(res.data));
     });
 
   };
