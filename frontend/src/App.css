@@ -11,6 +11,8 @@
 .popup-content {
   border-radius: 20px;
   padding: 20px !important;
+  --primary-color: #0095ff;
+  --secondary-color: #4a85f6;
 }
 
 .w-900-content {

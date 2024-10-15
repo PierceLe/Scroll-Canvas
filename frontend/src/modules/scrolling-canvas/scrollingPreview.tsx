@@ -19,6 +19,10 @@ import { ReactPDF } from '@frontend/components/react-pdf';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { ScrollingController } from '@frontend/handlers/scrolling';
 import { Icon } from '@frontend/components/icon';
+import { useState, useEffect } from 'react';
+import { Input } from '@frontend/components/input';
+import { getCookie } from '@frontend/helpers/cookie';
+import { toast } from 'react-toastify';
 
 type ScrollingPreview = {
   isShowModal: boolean;
@@ -51,7 +55,16 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
   const dispatch = useReduxDispatch();
   const scrollController = ScrollingController.getInstance();
 
+  const [editTitle, setEditTitle] = useState<string>();
+  const [isEdit, setIsEdit] = useState<boolean>();
+  const [file, setFile] = useState<any>();
+
   const styles = useStyles();
+
+  useEffect(() => {
+    setEditTitle(title ?? '');
+    setIsEdit(false);
+  }, [id]);
 
   const handleDeleteScroll = (closeConfirmDelete: any) => {
     dispatch(
@@ -60,11 +73,63 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
       }),
     );
 
-    closeConfirmDelete()
+    closeConfirmDelete();
     if (onClose) onClose();
   };
 
-  const handleUpdateScroll = async () => {};
+  const handleFile = (e: any) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleTitle = e => {
+    setEditTitle(e.target.value);
+  };
+
+  const handleUpdateScroll = async () => {
+    const formData = new FormData();
+
+    // Update the formData object
+    formData.append('file', file);
+    formData.append('title', editTitle ?? '');
+
+    // dispatch(scrollController.updateScrolling(formData));
+
+    fetch('http://localhost:8080/api/v1/scroll/upload', {
+      method: 'post',
+      body: formData,
+      headers: {
+        Authorization: 'Bearer ' + getCookie('Authentication'),
+      },
+    }).then(async response => {
+      console.log(response);
+      const res = await response.json();
+      if (res.statusCode === 200) {
+        toast.info('Update scroll successfully!');
+      }
+      // dispatch(createScrollSuccess(res.data));
+    });
+  };
+
+  const handleDownload = () => {
+    fetch(url, { mode: 'cors', cache: 'no-cache' })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        console.log({ url });
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = url || 'downloaded-file';
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(error => {
+        console.error('Error fetching the file:', error);
+      });
+  };
 
   return (
     <div>
@@ -78,22 +143,66 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
         className="w-900"
       >
         <div className="modal">
-          <div className={`line-clamp-2 ${classnames(styles.title)}`}>
-            {title}
+          <div className="mb-5">
+            {isEdit ? (
+              <Input
+                size="md"
+                value={editTitle}
+                classNames={classnames(styles.input)}
+                onChange={handleTitle}
+              />
+            ) : (
+              <div className={`line-clamp-2 ${classnames(styles.title)}`}>
+                {title}
+              </div>
+            )}
           </div>
 
-          <div className={classnames(styles.pdfPreviewWrap)}>
-            <ReactPDF url={url ?? ''} />
-          </div>
+          {isEdit ? (
+            <Input
+              size="md"
+              type="file"
+              onChange={handleFile}
+              classNames={classnames(styles.input)}
+            />
+          ) : (
+            <div className={classnames(styles.pdfPreviewWrap)}>
+              <ReactPDF url={url ?? ''} />
+            </div>
+          )}
 
           <div className={`actions ${classnames(styles.action)}`}>
-            <Button
-              variant="contained"
-              size="md"
-              color="success"
-              onClick={handleUpdateScroll}
-            >
-              Save
+            {isEdit && (
+              <Button
+                variant="contained"
+                size="md"
+                color="success"
+                onClick={handleUpdateScroll}
+              >
+                Save
+              </Button>
+            )}
+            {isEdit ? (
+              <Button
+                variant="contained"
+                size="md"
+                color="default"
+                onClick={() => setIsEdit(false)}
+              >
+                Cancel
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                size="md"
+                color="success"
+                onClick={() => setIsEdit(true)}
+              >
+                Edit
+              </Button>
+            )}
+            <Button variant="contained" size="md" onClick={handleDownload}>
+              Download
             </Button>
             {(user?.role === ROLE_TYPE.ADMIN ||
               user?.username === createdByUsername) && (
@@ -156,7 +265,7 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
 
 const useStyles = () => {
   return {
-    title: classnames(typography('text-tx22', 'font-bold'), spacing('mb-5')),
+    title: classnames(typography('text-tx22', 'font-bold')),
     form: classnames(spacing('mb-4')),
     inputWrap: classnames(spacing('mb-2', 'last:!mb-0')),
     input: classnames(sizing('w-full')),

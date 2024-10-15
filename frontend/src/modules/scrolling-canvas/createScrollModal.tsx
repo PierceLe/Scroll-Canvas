@@ -55,12 +55,13 @@ export const CreateScrollModal = () => {
       headers: {
         Authorization: 'Bearer ' + getCookie('Authentication'),
       },
-    }).then(async (response) => {
+    }).then(async response => {
       const res = await response.json();
-      toast.info('Create scroll successfully!');
-      dispatch(createScrollSuccess(res.data));
+      if (res.statusCode === 200) {
+        toast.info('Create scroll successfully!');
+        dispatch(createScrollSuccess(res.data));
+      }
     });
-
   };
 
   return (
