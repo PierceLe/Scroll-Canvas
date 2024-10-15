@@ -29,6 +29,7 @@ public class User implements UserDetails {
     private String role;
     private String password;
     private String phone;
+    private String avatarUrl;
     private String salt;
 
     @Override

@@ -13,7 +13,9 @@ import org.scrollSystem.request.UserUpdateRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,7 +24,7 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateService {
     final UserRepository userRepository;
-    final JwtService jwtService;
+    final S3Service s3Service;
     final UserAuthenticationService authenticationService;
     final int maxAttempts = 3;
     private final PasswordEncoder passwordEncoder;
@@ -98,5 +100,20 @@ public class UserUpdateService {
         userRepository.save(user);
 
         return "success";
+    }
+
+    public String updateAvatar(MultipartFile file) throws IOException {
+        // Check if the file is an image
+        if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
+            throw new IllegalArgumentException("File is not an image");
+        }
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String fileUrl = s3Service.uploadFile(file);
+        user.setAvatarUrl(fileUrl);
+        userRepository.save(user);
+
+        return "update avatar successfully";
     }
 }

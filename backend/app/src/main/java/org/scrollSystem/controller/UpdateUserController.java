@@ -11,6 +11,7 @@ import org.scrollSystem.response.DefaultResponse;
 import org.scrollSystem.service.UserUpdateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/update")
@@ -40,6 +41,19 @@ public class UpdateUserController {
     ) {
         try {
             String response = userUpdateService.updatePassword(user_id, request);
+            return DefaultResponse.success(response);
+        }
+        catch (Exception e) {
+            return DefaultResponse.error(e.getMessage());
+        }
+    }
+
+    @PutMapping("/avatar")
+    public ResponseEntity<DefaultResponse<String>> updateAvatar(
+            @RequestParam MultipartFile file
+            ) {
+        try {
+            String response = userUpdateService.updateAvatar(file);
             return DefaultResponse.success(response);
         }
         catch (Exception e) {
