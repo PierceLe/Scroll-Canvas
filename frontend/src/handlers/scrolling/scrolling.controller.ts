@@ -15,8 +15,8 @@ export class ScrollingController {
 
   public getScrollings = createAsyncThunk<any, any>(
     'getScrollingsAPI',
-    async (data, { rejectWithValue }) => {
-      const fetchFn = this.scrollingService.getScrollings({ data });
+    async (params, { rejectWithValue }) => {
+      const fetchFn = this.scrollingService.getScrollings({ params });
 
       try {
         const response = await fetchFn();

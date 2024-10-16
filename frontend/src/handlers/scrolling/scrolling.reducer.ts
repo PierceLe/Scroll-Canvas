@@ -13,13 +13,10 @@ export const scrollSlice = createSlice({
   initialState,
   reducers: {
     createScrollSuccess: (state, action) => {
-      console.log(action)
+      console.log(action);
       return {
         ...state,
-        scrollings: [
-          action.payload,
-          ...state.scrollings
-        ]
+        scrollings: [action.payload, ...state.scrollings],
       };
     },
   },

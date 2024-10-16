@@ -15,7 +15,20 @@ const initialState: UserState = {
 export const userSlice = createSlice({
   name: 'userSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    changeAvatarSuccess: (state, action) => {
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          data: User.buildUser({
+            ...state.currentUser.data,
+            avatarUrl: action.payload
+          })
+        },
+      };
+    },
+  },
   extraReducers: builder => {
     // GetCurrentUserAPI
     builder.addCase(userController.getCurrentUser.pending, state => {
@@ -223,5 +236,5 @@ export const userSlice = createSlice({
 });
 
 // eslint-disable-next-line no-empty-pattern
-export const {} = userSlice.actions;
+export const { changeAvatarSuccess } = userSlice.actions;
 export const { reducer: userReducer } = userSlice;
