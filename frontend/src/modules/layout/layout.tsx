@@ -7,6 +7,7 @@ import classnames, {
   position,
   sizing,
   spacing,
+  zIndex,
 } from '@frontend/tailwindcss-classnames';
 
 export const Layout = (props: LayoutProps) => {
@@ -32,7 +33,8 @@ const useStyles = () => {
       backgroundColor('bg-white'),
       boxShadow('shadow-2xl'),
       position('sticky'),
-      layout('top-0')
+      layout('top-0'),
+      zIndex('z-10')
     ),
     content: classnames(backgroundColor('bg-gray-1'), sizing('min-h-screen')),
   };
