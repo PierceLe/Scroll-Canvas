@@ -25,6 +25,7 @@ import java.util.Optional;
 public class UserUpdateService {
     final UserRepository userRepository;
     final S3Service s3Service;
+    final JwtService jwtService;
     final UserAuthenticationService authenticationService;
     final int maxAttempts = 3;
     private final PasswordEncoder passwordEncoder;
@@ -43,8 +44,6 @@ public class UserUpdateService {
         if (!Objects.equals(user.getUsername(), currUsername)) {
             throw new ValidationException("No editing right");
         }
-
-
 
         //Check for first name
         if (Objects.nonNull(request.getFirstName()))
@@ -102,6 +101,7 @@ public class UserUpdateService {
         return "success";
     }
 
+
     public String updateAvatar(MultipartFile file) throws IOException {
         // Check if the file is an image
         if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
@@ -114,6 +114,7 @@ public class UserUpdateService {
         user.setAvatarUrl(fileUrl);
         userRepository.save(user);
 
-        return "update avatar successfully";
+        return "update avatar succesfully";
     }
+
 }

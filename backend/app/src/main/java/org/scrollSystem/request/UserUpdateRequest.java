@@ -3,6 +3,7 @@ package org.scrollSystem.request;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -28,6 +29,7 @@ public class UserUpdateRequest {
 
     @Pattern(regexp = "^[+]?[0-9]{10,13}$", message = "Invalid phone number")
     String phoneNumber;
+
 
 
 }
