@@ -114,6 +114,6 @@ public class UserUpdateService {
         user.setAvatarUrl(fileUrl);
         userRepository.save(user);
 
-        return "update avatar successfully";
+        return fileUrl;
     }
 }

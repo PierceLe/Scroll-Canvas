@@ -3,8 +3,11 @@
  */
 package org.scrollSystem;
 
+import org.scrollSystem.utility.EnvLoader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.Map;
 
 @SpringBootApplication
 public class App {
@@ -14,6 +17,13 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
+        // Load the .env file manually
+        Map<String, String> envVars = EnvLoader.loadEnv(".env");
+        // Set System properties (will be picked up by Spring Boot)
+        envVars.forEach(System::setProperty);
+        // Print out some variables for testing
+        System.out.println("MYSQL_DATABASE: " + envVars.get("MYSQL_DATABASE"));
+
         SpringApplication.run(App.class, args);
 
     }

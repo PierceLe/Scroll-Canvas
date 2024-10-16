@@ -26,16 +26,7 @@ public class UserService {
 
         List<User> userList = userRepository.getListUser(email, username);
         for (User user: userList) {
-            UserResponse userResponse = UserResponse.builder()
-                    .id(user.getId())
-                    .firstName(user.getFirstName())
-                    .lastName(user.getLastName())
-                    .email(user.getEmail())
-                    .username(user.getUsername())
-                    .phone(user.getPhone())
-                    .role(user.getRole())
-                    .build();
-
+            UserResponse userResponse = getUserResponse(user);
             response.add(userResponse);
         }
 
@@ -56,18 +47,7 @@ public class UserService {
 
     public UserResponse getInfo() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        UserResponse userResponse = UserResponse.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .phone(user.getPhone())
-                .role(user.getRole())
-                .build();
-
-        return userResponse;
+        return getUserResponse(user);
     }
 
     public String checkExistingUsername(String username) {
@@ -78,5 +58,18 @@ public class UserService {
         }
 
         return "Ok";
+    }
+
+    private UserResponse getUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .phone(user.getPhone())
+                .role(user.getRole())
+                .avatarUrl(user.getAvatarUrl())
+                .build();
     }
 }
