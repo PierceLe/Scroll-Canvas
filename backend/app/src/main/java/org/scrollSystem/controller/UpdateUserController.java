@@ -3,11 +3,11 @@ package org.scrollSystem.controller;
 
 import jakarta.validation.Valid;
 import lombok.*;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.scrollSystem.request.UpdatePasswordRequest;
 import org.scrollSystem.request.UserUpdateRequest;
 import org.scrollSystem.response.DefaultResponse;
+import org.scrollSystem.response.UserResponse;
 import org.scrollSystem.service.UserUpdateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +22,10 @@ public class UpdateUserController {
 
     // API for update user information like lastName, ...
     @PutMapping("/user/{user_id}")
-    public ResponseEntity<DefaultResponse<String>> update(@RequestBody @Valid UserUpdateRequest request,
-                                                          @PathVariable String user_id) {
+    public ResponseEntity<DefaultResponse<UserResponse>> update(@RequestBody @Valid UserUpdateRequest request,
+                                               @PathVariable String user_id) {
         try {
-            String response = userUpdateService.update(request, user_id);
+            UserResponse response = userUpdateService.update(request, user_id);
             return DefaultResponse.success(response);
         }
         catch (Exception e) {

@@ -10,6 +10,7 @@ import org.scrollSystem.models.User;
 import org.scrollSystem.repository.UserRepository;
 import org.scrollSystem.request.UpdatePasswordRequest;
 import org.scrollSystem.request.UserUpdateRequest;
+import org.scrollSystem.response.UserResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class UserUpdateService {
     String phoneNumber;;
 
     @Transactional
-    public String update(UserUpdateRequest request, String currUsername) {
+    public UserResponse update(UserUpdateRequest request, String currUsername) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (!Objects.equals(user.getUsername(), currUsername)) {
@@ -75,8 +76,13 @@ public class UserUpdateService {
 
         userRepository.save(user);
 
-        return "success";
-
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .build();
     }
 
     private void setPassword(User user, String password) {
