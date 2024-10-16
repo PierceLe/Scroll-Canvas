@@ -38,7 +38,7 @@ export const FilterBlock = () => {
     dispatch(
       scrollController.getScrollings({
         title,
-        createdBy,
+        owner: createdBy,
       }),
     );
   };
@@ -57,10 +57,10 @@ export const FilterBlock = () => {
           />
         </div>
         <div className={classnames(styles.inputWrap)}>
-          <div className={classnames(styles.inputLabel)}>Created By</div>
+          <div className={classnames(styles.inputLabel)}>Owner</div>
           <Input
             size="md"
-            placeholder="Enter created by"
+            placeholder="Enter owner"
             classNames={classnames(styles.input)}
             onChange={handleInput('createdBy')}
           />

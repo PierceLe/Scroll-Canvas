@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -40,7 +41,7 @@ export const CreateScrollModal = () => {
     setFile(e.target.files[0]);
   };
 
-  const handleCreateScroll = async () => {
+  const handleCreateScroll = async (closeModal: any) => {
     const formData = new FormData();
 
     // Update the formData object
@@ -49,7 +50,7 @@ export const CreateScrollModal = () => {
 
     // dispatch(scrollController.updateScrolling(formData));
 
-    fetch('http://localhost:8080/api/v1/scroll/upload', {
+    fetch(`${import.meta.env.VITE_SERVER_HOST}/api/v1/scroll/upload`, {
       method: 'post',
       body: formData,
       headers: {
@@ -57,9 +58,11 @@ export const CreateScrollModal = () => {
       },
     }).then(async response => {
       const res = await response.json();
-      if (res.statusCode === 200) {
+      console.log(res);
+      if (res.success) {
         toast.info('Create scroll successfully!');
         dispatch(createScrollSuccess(res.data));
+        closeModal()
       }
     });
   };
@@ -78,39 +81,42 @@ export const CreateScrollModal = () => {
         modal={true}
         closeOnDocumentClick
       >
-        <div className="modal">
-          <div className={classnames(styles.title)}>Create new scroll</div>
-          <div className={classnames(styles.form)}>
-            <div className={classnames(styles.inputWrap)}>
-              <div className={classnames(styles.inputLabel)}>Title</div>
-              <Input
-                size="md"
-                placeholder="Enter title"
-                classNames={classnames(styles.input)}
-                onChange={handleInput('title')}
-              />
+        {/** @ts-ignore */}
+        {(close: any) => (
+          <div className="modal">
+            <div className={classnames(styles.title)}>Create new scroll</div>
+            <div className={classnames(styles.form)}>
+              <div className={classnames(styles.inputWrap)}>
+                <div className={classnames(styles.inputLabel)}>Title</div>
+                <Input
+                  size="md"
+                  placeholder="Enter title"
+                  classNames={classnames(styles.input)}
+                  onChange={handleInput('title')}
+                />
+              </div>
+              <div className={classnames(styles.inputWrap)}>
+                <div className={classnames(styles.inputLabel)}>File</div>
+                <Input
+                  size="md"
+                  classNames={classnames(styles.input)}
+                  onChange={handleFile}
+                  type="file"
+                />
+              </div>
             </div>
-            <div className={classnames(styles.inputWrap)}>
-              <div className={classnames(styles.inputLabel)}>File</div>
-              <Input
+            <div className={`actions ${classnames(styles.action)}`}>
+              <Button
+                variant="contained"
                 size="md"
-                classNames={classnames(styles.input)}
-                onChange={handleFile}
-                type="file"
-              />
+                color="success"
+                onClick={() => handleCreateScroll(close)}
+              >
+                Create scroll
+              </Button>
             </div>
           </div>
-          <div className={`actions ${classnames(styles.action)}`}>
-            <Button
-              variant="contained"
-              size="md"
-              color="success"
-              onClick={handleCreateScroll}
-            >
-              Create scroll
-            </Button>
-          </div>
-        </div>
+        )}
       </Popup>
     </div>
   );

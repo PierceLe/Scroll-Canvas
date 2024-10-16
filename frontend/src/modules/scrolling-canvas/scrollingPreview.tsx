@@ -19,7 +19,7 @@ import { ReactPDF } from '@frontend/components/react-pdf';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { ScrollingController } from '@frontend/handlers/scrolling';
 import { Icon } from '@frontend/components/icon';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 import { Input } from '@frontend/components/input';
 import { getCookie } from '@frontend/helpers/cookie';
 import { toast } from 'react-toastify';
@@ -81,7 +81,9 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
     setFile(e.target.files[0]);
   };
 
-  const handleTitle = e => {
+  const handleTitle = (e: {
+    target: { value: SetStateAction<string | undefined> };
+  }) => {
     setEditTitle(e.target.value);
   };
 
@@ -111,24 +113,12 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
   };
 
   const handleDownload = () => {
-    fetch(url, { mode: 'cors', cache: 'no-cache' })
-      .then(response => response.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(new Blob([blob]));
-        console.log({ url });
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = url || 'downloaded-file';
-        document.body.appendChild(link);
-
-        link.click();
-
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      })
-      .catch(error => {
-        console.error('Error fetching the file:', error);
-      });
+    const link = document.createElement('a');
+    link.href = url ?? '';
+    link.setAttribute('download', 'yourfile.pdf'); // Specify the file name
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
