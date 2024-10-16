@@ -17,12 +17,20 @@ export class ServerCommunicate implements IServerCommunicate {
 
   private mutate(url: string, options: AxiosRequestConfig<any>) {
     const fetchFn = async () => {
+      const authentication = getCookie('Authentication');
+      const authHeader: {
+        Authorization?: string;
+      } = {};
+      if (authentication) {
+        authHeader['Authorization'] = 'Bearer ' + authentication;
+      }
+
       return axios({
         url: `${this.baseUrl}${url}`,
         headers: {
           ...options?.headers,
           // 'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + getCookie("Authentication"),
+          ...authHeader,
         },
         withCredentials: true,
         ...options,

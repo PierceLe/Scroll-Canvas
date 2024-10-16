@@ -3,6 +3,7 @@ import classnames, {
   backgroundColor,
   borderRadius,
   borders,
+  cursor,
   display,
   justifyContent,
   sizing,
@@ -47,7 +48,8 @@ const useStyles = () => {
       spacing('p-2'),
       display('flex'),
       alignItems('items-center'),
-      justifyContent('justify-center')
+      justifyContent('justify-center'),
+      cursor('cursor-pointer')
     ),
     variant: (
       variant: ButtonVariant,
@@ -89,7 +91,10 @@ const useStyles = () => {
                   )
                 : null,
               color === 'default'
-                ? classnames(backgroundColor('hover:bg-gray-100'))
+                ? classnames(
+                  backgroundColor('hover:bg-gray-100'),
+                  borders('border-2'),
+                )
                 : null,
             )
           : null,

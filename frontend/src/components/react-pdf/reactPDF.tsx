@@ -23,7 +23,7 @@ export type ReactPDFProps = {
 };
 export const ReactPDF = (props: ReactPDFProps) => {
   const { url } = props;
-  const [numPages, setNumPages] = useState<number>();
+  const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const styles = useStyles();
@@ -36,6 +36,18 @@ export const ReactPDF = (props: ReactPDFProps) => {
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
   };
+
+  const handlePreviousPage = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1)
+    }
+  }
+
+  const handleNextPage = () => {
+    if (pageNumber < numPages) {
+      setPageNumber(pageNumber + 1)
+    }
+  }
 
   return (
     <div>
@@ -53,10 +65,11 @@ export const ReactPDF = (props: ReactPDFProps) => {
       {numPages ? (
         <div className={classnames(styles.pdfPreviewPage)}>
           <Button
-            onClick={() => setPageNumber(pageNumber - 1)}
+            onClick={handlePreviousPage}
             color="default"
             variant={'contained'}
             size={'sm'}
+            disabled={pageNumber === 1}
           >
             {`<`}
           </Button>
@@ -64,10 +77,11 @@ export const ReactPDF = (props: ReactPDFProps) => {
             {pageNumber}/{numPages}
           </div>
           <Button
-            onClick={() => setPageNumber(pageNumber + 1)}
+            onClick={handleNextPage}
             color="default"
             variant={'contained'}
             size={'sm'}
+            disabled={pageNumber === numPages}
           >
             {`>`}
           </Button>
