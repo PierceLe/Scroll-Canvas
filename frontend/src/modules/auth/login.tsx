@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 
@@ -31,9 +31,31 @@ export const Login = () => {
   const [password, setPassword] = useState();
   const [isShowPassword, setIsShowPassword] = useState<boolean>();
 
-  // Track the number of attempts
-  const [attempts, setAttempts] = useState(0);
-  const maxAttempts = 3;
+  const [isReachableMaxAttempts, setIsReachableMaxAttempts] =
+    useState<boolean>();
+
+  useEffect(() => {
+    checkIsReachableMaxAttempts();
+  }, []);
+
+  const checkIsReachableMaxAttempts = () => {
+    const numOfAttemptsChangePassword = localStorage.getItem(
+      'numOfAttemptsLogin',
+    );
+    const latestAttemptsChangePassword = localStorage.getItem(
+      'latestAttemptsLogin',
+    );
+
+    const now = Date.now();
+
+    // Check if attempt login more than 3 in 15 minutes
+    if (
+      Number(numOfAttemptsChangePassword) >= 3 &&
+      now - Number(latestAttemptsChangePassword) < 900000
+    ) {
+      setIsReachableMaxAttempts(true);
+    }
+  };
 
   const handleUsername = (e: any) => {
     setUsername(e.target.value);
@@ -75,16 +97,10 @@ export const Login = () => {
     //Verify for password authentication
     if (data?.payload?.token) {
       toast.info('Login successfully!');
-      await sleep(1000);
+      await sleep(500);
       window.location.reload();
-    } else if (attempts >= maxAttempts) {
-      // Check if the three attempts has been reached
-      toast.error("You have reached the maximum number of login attempts. Please try again later.")
-    }
-    else {
-      // Increment the variable attempts on failed login
-      setAttempts(prev => prev + 1);
-      toast.error("Login failed! Incorrect username or password. Type the correct username and password, and try again.");
+    } else {
+      checkIsReachableMaxAttempts();
     }
   };
 
@@ -97,6 +113,13 @@ export const Login = () => {
       <div className={classnames(styles.leftSide)}>
         <div className={classnames(styles.leftSideBody)}>
           <div className={classnames(styles.title)}>Login to your account</div>
+          {isReachableMaxAttempts ? (
+            <div className={classnames(styles.note)}>
+              <span>*</span>
+              You have exceeded the maximum number of password change attempts.
+              Please wait to 15 minutes
+            </div>
+          ) : null}
           <div className={classnames(styles.form)}>
             <div className={classnames(styles.inputWrap)}>
               <div className={classnames(styles.inputLabel)}>Username</div>
@@ -131,6 +154,7 @@ export const Login = () => {
               size="md"
               classNames={classnames(styles.buttonLogin)}
               onClick={handleLogin}
+              disabled={isReachableMaxAttempts}
             >
               Login
             </Button>
@@ -174,5 +198,6 @@ const useStyles = () => {
     buttonLogin: classnames(sizing('w-full'), spacing('mb-4')),
     buttonSignUp: classnames(sizing('w-full')),
     icon: classnames(sizing('w-5', 'h-5')),
+    note: classnames(spacing('mb-5'), typography('text-red-500')),
   };
 };

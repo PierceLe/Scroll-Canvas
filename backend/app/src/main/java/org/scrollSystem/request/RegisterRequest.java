@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -44,4 +45,5 @@ public class RegisterRequest {
     @NotBlank(message = "Phone number can not be empty")
     private String phone;
     private String salt;
+
 }

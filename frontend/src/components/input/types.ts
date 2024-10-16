@@ -8,4 +8,5 @@ export type InputProps = {
   classNames?: TTailwindString
   value?: string | number | readonly string[] | undefined
   icon?: any
+  disabled?: boolean
 };

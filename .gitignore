@@ -3,6 +3,7 @@ backend/.gradle
 backend/gradlew.bat
 backend/app/bin
 backend/app/build
+backend/.env
 # Ignore in root project
 .DS_Store
 .idea/

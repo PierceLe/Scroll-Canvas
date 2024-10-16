@@ -51,7 +51,7 @@ public class UpdateUserController {
     @PutMapping("/avatar")
     public ResponseEntity<DefaultResponse<String>> updateAvatar(
             @RequestParam MultipartFile file
-            ) {
+    ) {
         try {
             String response = userUpdateService.updateAvatar(file);
             return DefaultResponse.success(response);
@@ -60,4 +60,18 @@ public class UpdateUserController {
             return DefaultResponse.error(e.getMessage());
         }
     }
+//
+//    // API for deleting profile picture
+//    @DeleteMapping("/delete/{user_id}")
+//    public ResponseEntity<DefaultResponse<String>> deleteProfilePicture(@PathVariable String user_id) {
+//        try {
+//            userUpdateService.deleteProfilePicture(user_id);
+//            return DefaultResponse.success("File deleted successfully");
+//        } catch (ValidationException e) {
+//            return DefaultResponse.error(e.getMessage());
+//        } catch (IllegalArgumentException e){
+//            return DefaultResponse.error(e.getMessage());
+//        }
+//
+//    }
 }

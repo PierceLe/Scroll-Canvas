@@ -10,13 +10,13 @@ import org.scrollSystem.request.RegisterRequest;
 import org.scrollSystem.response.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import org.scrollSystem.response.UserResponse;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,10 +25,9 @@ public class UserAuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    //    private final AuthenticationManager authenticationManager;
     private final ApplicationConfig applicationConfig;
 
-    public UserResponse register(RegisterRequest request) {
+    public UserResponse register(RegisterRequest request) throws IOException {
         Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
         if (optionalUser.isPresent()) {
             throw new ValidationException("Email have been existed");
@@ -92,6 +91,7 @@ public class UserAuthenticationService {
         if (!hashInputPassword.equals(user.getPassword())) {
             return false;
         }
+
 
         return true;
     }

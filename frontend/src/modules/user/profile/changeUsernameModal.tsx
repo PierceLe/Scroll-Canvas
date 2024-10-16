@@ -34,15 +34,17 @@ export const ChangeUsernameModal = () => {
   };
 
   const handleUpdateUsername = async () => {
-    await dispatch(
+    const data = await dispatch(
       userController.updateUsername({
         currentUsername: currentUser.data?.username,
         newUsername: username,
       }),
     );
 
-    navigate(PAGE_LINKS.HOME.path);
-    window.location.reload();
+    if (data?.meta?.requestStatus === 'fulfilled') {
+      navigate(PAGE_LINKS.HOME.path);
+      window.location.reload();
+    }
   };
 
   return (
