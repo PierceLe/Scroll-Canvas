@@ -6,6 +6,7 @@ export class User {
   public username?: string;
   public phone?: string;
   public role?: string;
+  public avatarUrl?: string
 
   public static buildUser(user: any): User {
     const newUser = new User();
@@ -16,6 +17,7 @@ export class User {
     newUser.username = user.username;
     newUser.phone = user.phone;
     newUser.role = user.role;
+    newUser.avatarUrl = user.avatarUrl
     return newUser;
   }
 

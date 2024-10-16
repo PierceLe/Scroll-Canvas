@@ -12,11 +12,15 @@ import classnames, {
   typography,
   alignItems,
   justifyContent,
+  gap,
 } from '@frontend/tailwindcss-classnames';
 import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
 import { ChangeUsernameModal } from './changeUsernameModal';
 import { ChangePasswordModal } from './changePasswordModal';
-import { UserController } from '@frontend/handlers/user';
+import { changeAvatarSuccess, UserController } from '@frontend/handlers/user';
+import { ChangeAvatarModal } from './changeAvatarModal';
+import { getCookie } from '@frontend/helpers/cookie';
+import { toast } from 'react-toastify';
 
 export const Profile = () => {
   const { userState } = useReduxSelector(['userState']);
@@ -31,6 +35,10 @@ export const Profile = () => {
   const [lastName, setLastName] = useState<string>();
   const [username, setUsername] = useState<string>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
+
+  const defaultAvatar = '../../../public/defaultAvatar.jpg';
+  const [src, setSrc] = useState('');
+  const [avatar, setAvatar] = useState<any>();
 
   useEffect(() => {
     const { email, firstName, lastName, username, phone } =
@@ -96,67 +104,123 @@ export const Profile = () => {
     );
   };
   console.log({ isChange });
+  const handleImgChange = (e: any) => {
+    setSrc(URL.createObjectURL(e.target.files[0]));
+    setAvatar(e.target.files[0]);
+    // setModalOpen(true);
+  };
+
+  const handleUpdateAvatar = () => {
+    const formData = new FormData();
+
+    // Update the formData object
+    formData.append('file', avatar);
+
+    fetch(`${import.meta.env.VITE_SERVER_HOST}/api/v1/update/avatar`, {
+      method: 'put',
+      body: formData,
+      headers: {
+        Authorization: 'Bearer ' + getCookie('Authentication'),
+      },
+    }).then(async response => {
+      const res = await response.json();
+      console.log(res);
+      if (res.success) {
+        toast.info('Change avatar successfully!');
+        dispatch(changeAvatarSuccess(res.data));
+        // closeModal()
+      }
+    });
+  };
 
   return (
     <div className={classnames(styles.root)}>
-      <div className={classnames(styles.title)}>Your profile</div>
-      <div className={classnames(styles.form)}>
-        <div className={classnames(styles.inputWrap)}>
-          <div className={classnames(styles.inputLabel)}>First Name</div>
-          <Input
-            size="lg"
-            placeholder="Enter your first name"
-            classNames={classnames(styles.input)}
-            onChange={handleInput('firstName')}
-            value={firstName}
-          />
+      <div className={classnames(styles.profile)}>
+        <div className={classnames(styles.title)}>Your profile</div>
+        <div className={classnames(styles.form)}>
+          <div className={classnames(styles.inputWrap)}>
+            <div className={classnames(styles.inputLabel)}>First Name</div>
+            <Input
+              size="lg"
+              placeholder="Enter your first name"
+              classNames={classnames(styles.input)}
+              onChange={handleInput('firstName')}
+              value={firstName}
+            />
+          </div>
+          <div className={classnames(styles.inputWrap)}>
+            <div className={classnames(styles.inputLabel)}>Last Name</div>
+            <Input
+              size="lg"
+              placeholder="Enter your last name"
+              classNames={classnames(styles.input)}
+              onChange={handleInput('lastName')}
+              value={lastName}
+            />
+          </div>
+          <div className={classnames(styles.inputWrap)}>
+            <div className={classnames(styles.inputLabel)}>Email</div>
+            <Input
+              size="lg"
+              placeholder="Enter your email"
+              type="email"
+              classNames={classnames(styles.input)}
+              onChange={handleInput('email')}
+              value={email}
+            />
+          </div>
+          <div className={classnames(styles.inputWrap)}>
+            <div className={classnames(styles.inputLabel)}>Phone Number</div>
+            <Input
+              size="lg"
+              placeholder="Enter your phone number"
+              classNames={classnames(styles.input)}
+              onChange={handleInput('phoneNumber')}
+              value={phoneNumber}
+            />
+          </div>
         </div>
-        <div className={classnames(styles.inputWrap)}>
-          <div className={classnames(styles.inputLabel)}>Last Name</div>
-          <Input
-            size="lg"
-            placeholder="Enter your last name"
-            classNames={classnames(styles.input)}
-            onChange={handleInput('lastName')}
-            value={lastName}
-          />
+        <div className={classnames(styles.changeSecureWrap)}>
+          <ChangeUsernameModal />
+          <ChangePasswordModal />
         </div>
-        <div className={classnames(styles.inputWrap)}>
-          <div className={classnames(styles.inputLabel)}>Email</div>
-          <Input
-            size="lg"
-            placeholder="Enter your email"
-            type="email"
-            classNames={classnames(styles.input)}
-            onChange={handleInput('email')}
-            value={email}
-          />
-        </div>
-        <div className={classnames(styles.inputWrap)}>
-          <div className={classnames(styles.inputLabel)}>Phone Number</div>
-          <Input
-            size="lg"
-            placeholder="Enter your phone number"
-            classNames={classnames(styles.input)}
-            onChange={handleInput('phoneNumber')}
-            value={phoneNumber}
-          />
-        </div>
+        <Button
+          variant="contained"
+          size="lg"
+          classNames={classnames(styles.buttonSignUp)}
+          onClick={handleUpdateProfile}
+          disabled={!isChange}
+          color="success"
+        >
+          Update Profile
+        </Button>
       </div>
-      <div className={classnames(styles.changeSecureWrap)}>
-        <ChangeUsernameModal />
-        <ChangePasswordModal />
+      <div className={classnames(styles.avatarSide)}>
+        <img
+          src={
+            src
+              ? src
+              : currentUser.data?.avatarUrl
+              ? currentUser.data?.avatarUrl
+              : defaultAvatar
+          }
+          className={classnames(styles.avatar)}
+        />
+
+        <ChangeAvatarModal
+          src={src}
+          handleImgChange={handleImgChange}
+        />
+        <Button
+          variant="text"
+          size="lg"
+          classNames={classnames(styles.buttonEditAvatar)}
+          onClick={handleUpdateAvatar}
+          // disabled={!isChange}
+        >
+          Save
+        </Button>
       </div>
-      <Button
-        variant="contained"
-        size="lg"
-        classNames={classnames(styles.buttonSignUp)}
-        onClick={handleUpdateProfile}
-        disabled={!isChange}
-        color="success"
-      >
-        Update Profile
-      </Button>
     </div>
   );
 };
@@ -164,18 +228,19 @@ export const Profile = () => {
 const useStyles = () => {
   return {
     root: classnames(
-      spacing(
-        'mt-1/10-screen',
-        'mx-10',
-        'md:mx-44',
-        'lg:mx-96',
-        'px-10',
-        'py-5',
-      ),
+      display('flex'),
+      justifyContent('justify-center'),
+      gap('gap-10'),
+      spacing('mt-1/10-screen', 'px-10', 'py-5'),
+    ),
+    profile: classnames(
+      spacing('px-10', 'py-5'),
       backgroundColor('bg-white'),
       borderRadius('rounded-2xl'),
       borders('border-2'),
+      sizing('w-2/3', 'md:w-1/2'),
     ),
+    avatarSide: classnames(),
     title: classnames(typography('text-tx22'), spacing('mb-4')),
     form: classnames(spacing('mb-4')),
     inputWrap: classnames(spacing('mb-2', 'last:!mb-0')),
@@ -190,5 +255,12 @@ const useStyles = () => {
       justifyContent('justify-start'),
     ),
     changeSecureWrap: classnames(spacing('mb-2')),
+
+    avatar: classnames(
+      sizing('h-48', 'w-48'),
+      borderRadius('rounded-full'),
+      spacing('mb-4', 'mx-auto'),
+    ),
+    buttonEditAvatar: classnames(spacing('mx-auto')),
   };
 };
