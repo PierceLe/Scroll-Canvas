@@ -21,8 +21,6 @@ public class App {
         Map<String, String> envVars = EnvLoader.loadEnv(".env");
         // Set System properties (will be picked up by Spring Boot)
         envVars.forEach(System::setProperty);
-        // Print out some variables for testing
-        System.out.println("MYSQL_DATABASE: " + envVars.get("MYSQL_DATABASE"));
 
         SpringApplication.run(App.class, args);
 

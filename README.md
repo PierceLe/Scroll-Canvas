@@ -21,6 +21,13 @@ ScrollSystem is a full-stack application with a **Spring Boot** backend and a **
 
 
 ## Project Structure
+### Project Directory
+```
+├── backend/                             # Directory for running backend for the project
+├── frontend/                            # Directory for running frontend for the project
+├── .gitignore                           # File for ignore some specific file such as .env in both backend and frontend, folder build, node_modules,..
+└── makefile                             # simplify the process of running the project
+```
 
 ### Backend Directory (`backend/`)
 
@@ -41,7 +48,8 @@ backend/
 │       └── application.properties       # Spring Boot configuration
 ├── Dockerfile                           # Docker configuration for backend
 ├── docker-compose.yml                   # Docker Compose file for backend services
-└── build.gradle                         # Gradle configuration file
+├── build.gradle                         # Gradle configuration file
+└── .env.example                         # Environment variable example
 ```
 
 ### Frontend Directory (`frontend/`)
@@ -78,7 +86,7 @@ Ensure you have the following installed before running the project:
 - **Gradle** (for backend build automation)
 
 ## How to Run
-
+### Create .env file in both `frontend/` and `backend/` follows the format of `.env.example`
 ### Using the Makefile
 
 We provide a `Makefile` to simplify the process of running the project.

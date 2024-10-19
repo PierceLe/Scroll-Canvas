@@ -19,6 +19,7 @@ import java.util.List;
 public class ScrollController {
     private final ScrollService ScrollService;
 
+    // API for upload the file into AWS S3
     @PostMapping({"/upload"})
     public ResponseEntity<DefaultResponse<FileResponse>> uploadScroll(
             @RequestParam("file") MultipartFile file,
@@ -33,6 +34,7 @@ public class ScrollController {
         }
     }
 
+    // API for delete the file
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<DefaultResponse<Integer>> deleteFile(@PathVariable Integer id) {
         try {
@@ -43,6 +45,7 @@ public class ScrollController {
         }
     }
 
+    // API for get scrolls and filter depend on the params such as title, file_type, owner
     @GetMapping("")
     public ResponseEntity<DefaultResponse<List<FileResponse>>> getSearchFilter(@RequestParam("title") @Nullable String title,
                                                                                @RequestParam("file_type") @Nullable String fileType,

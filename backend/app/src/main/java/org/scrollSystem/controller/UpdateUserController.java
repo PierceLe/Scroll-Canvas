@@ -3,6 +3,7 @@ package org.scrollSystem.controller;
 
 import jakarta.validation.Valid;
 import lombok.*;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.scrollSystem.request.UpdatePasswordRequest;
 import org.scrollSystem.request.UserUpdateRequest;
@@ -48,6 +49,7 @@ public class UpdateUserController {
         }
     }
 
+    // API for update avatar
     @PutMapping("/avatar")
     public ResponseEntity<DefaultResponse<String>> updateAvatar(
             @RequestParam MultipartFile file

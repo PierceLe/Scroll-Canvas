@@ -35,100 +35,100 @@
 //@TestPropertySource("/test.properties")
 //public class AuthenticationControllerTest
 //{
-//    @Autowired
-//    private MockMvc mockMvc;
+//   @Autowired
+//   private MockMvc mockMvc;
 //
-//    @Autowired
-//    private WebApplicationContext webApplicationContext;
+//   @Autowired
+//   private WebApplicationContext webApplicationContext;
 //
-//    @MockBean
-//    private UserAuthenticationService userAuthenticationService;
+//   @MockBean
+//   private UserAuthenticationService userAuthenticationService;
 //
-//    private AuthenticationRequest authenticationRequestFails;
-//    private RegisterRequest registerRequestSucesss;
-//    private RegisterRequest registerRequestFails;
-//    private AuthenticationResponse authenticationResponse;
-//    private UserUpdateRequest updateRequestSucesss;
-//    @BeforeEach
-//    void initData()
-//    {
-//        authenticationRequestFails = AuthenticationRequest.builder()
-//                .username("idolbminh")
-//                .password("Minh301203@")
-//                .build();
+//   private AuthenticationRequest authenticationRequestFails;
+//   private RegisterRequest registerRequestSucesss;
+//   private RegisterRequest registerRequestFails;
+//   private AuthenticationResponse authenticationResponse;
+//   private UserUpdateRequest updateRequestSucesss;
+//   @BeforeEach
+//   void initData()
+//   {
+//       authenticationRequestFails = AuthenticationRequest.builder()
+//               .username("idolbminh")
+//               .password("Minh301203@")
+//               .build();
 //
-//        registerRequestSucesss = RegisterRequest.builder()
-//                .firstName("Nhat Minh")
-//                .lastName("Vuong")
-//                .email("nvuo0694@uni.sydney.edu.au")
-//                .password("LongBien1@")
-//                .username("nvuo0694")
-//                .phone("0413688993")
-//                .build();
+//       registerRequestSucesss = RegisterRequest.builder()
+//               .firstName("Nhat Minh")
+//               .lastName("Vuong")
+//               .email("nvuo0694@uni.sydney.edu.au")
+//               .password("LongBien1@")
+//               .username("nvuo0694")
+//               .phone("0413688993")
+//               .build();
 //
-//        registerRequestFails = RegisterRequest.builder()
-//            .firstName("Nhat Minh")
-//            .lastName("Vuong")
-//            .email("nvuo0694@uni.sydney.edu.au")
-//            .password("1")
-//            .username("nvuo0694")
-//            .phone("0413688993")
-//            .build();
+//       registerRequestFails = RegisterRequest.builder()
+//           .firstName("Nhat Minh")
+//           .lastName("Vuong")
+//           .email("nvuo0694@uni.sydney.edu.au")
+//           .password("1")
+//           .username("nvuo0694")
+//           .phone("0413688993")
+//           .build();
 //
-//        authenticationResponse = AuthenticationResponse.builder()
-//                .token("token")
-//                .build();
+//       authenticationResponse = AuthenticationResponse.builder()
+//               .token("token")
+//               .build();
 //
-//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+//       mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 //
 //
 //
-//    }
+//   }
 //
-//    @Test
-//    public void testRegisterSuccess() throws Exception
-//    {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String content = objectMapper.writeValueAsString(registerRequestSucesss);
+//   @Test
+//   public void testRegisterSuccess() throws Exception
+//   {
+//       ObjectMapper objectMapper = new ObjectMapper();
+//       String content = objectMapper.writeValueAsString(registerRequestSucesss);
 //
-//        Mockito.when(userAuthenticationService.register(ArgumentMatchers.any())).thenReturn(userResponse);
+//       Mockito.when(userAuthenticationService.register(ArgumentMatchers.any())).thenReturn(userResponse);
 //
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/api/v1/auth/register")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(content))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-//    }
+//       mockMvc.perform(MockMvcRequestBuilders
+//                       .post("/api/v1/auth/register")
+//                       .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                       .content(content))
+//               .andExpect(MockMvcResultMatchers.status().isOk());
+//   }
 //
-//    @Test
-//    public void testRegisterFail() throws Exception
-//    {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String content = objectMapper.writeValueAsString(registerRequestFails);
+//   @Test
+//   public void testRegisterFail() throws Exception
+//   {
+//       ObjectMapper objectMapper = new ObjectMapper();
+//       String content = objectMapper.writeValueAsString(registerRequestFails);
 //
-//        Mockito.when(userAuthenticationService.register(ArgumentMatchers.any())).thenReturn(authenticationResponse);
+//       Mockito.when(userAuthenticationService.register(ArgumentMatchers.any())).thenReturn(authenticationResponse);
 //
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/api/v1/auth/register")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(content))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-//    }
+//       mockMvc.perform(MockMvcRequestBuilders
+//                       .post("/api/v1/auth/register")
+//                       .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                       .content(content))
+//               .andExpect(MockMvcResultMatchers.status().isOk());
+//   }
 //
-//    @Test
-//    public void testLoginFail() throws Exception
-//    {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String content = objectMapper.writeValueAsString(authenticationRequestFails);
+//   @Test
+//   public void testLoginFail() throws Exception
+//   {
+//       ObjectMapper objectMapper = new ObjectMapper();
+//       String content = objectMapper.writeValueAsString(authenticationRequestFails);
 //
-//        Mockito.when(userAuthenticationService.register(ArgumentMatchers.any())).thenReturn(authenticationResponse);
+//       Mockito.when(userAuthenticationService.register(ArgumentMatchers.any())).thenReturn(authenticationResponse);
 //
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/api/v1/auth/login")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(content))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-//    }
+//       mockMvc.perform(MockMvcRequestBuilders
+//                       .post("/api/v1/auth/login")
+//                       .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                       .content(content))
+//               .andExpect(MockMvcResultMatchers.status().isOk());
+//   }
 //
 //
 //

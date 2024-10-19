@@ -20,6 +20,8 @@ import javax.annotation.Nullable;
 public class UserController {
     private final UserService userService;
 
+
+    // API FOR USER MANAGEMENT
     @GetMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<DefaultListResponse<UserResponse>> getUsers(
@@ -29,7 +31,7 @@ public class UserController {
         return DefaultListResponse.success(userService.getUsers(email, username));
     }
 
-
+    // API for delete user
     @DeleteMapping("/{usernamme}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<DefaultResponse<String>> deleteUser (
@@ -44,7 +46,7 @@ public class UserController {
         }
     }
 
-
+    // APi for get info of user from JWT
     @GetMapping("/info")
     public ResponseEntity<DefaultResponse<UserResponse>> register(
     ) {

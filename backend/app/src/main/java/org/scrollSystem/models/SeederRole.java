@@ -29,7 +29,7 @@ public class SeederRole implements ApplicationRunner
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Dotenv dotenv = Dotenv.configure().directory("./").load();
+        Dotenv dotenv = Dotenv.configure().directory("../").load();
         String salt = Base64.getEncoder().encodeToString(applicationConfig.getNextSalt());
         var user = User.builder()
                 .firstName(dotenv.get("ADMIN_FIRST_NAME"))
