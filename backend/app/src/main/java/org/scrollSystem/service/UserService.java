@@ -60,7 +60,7 @@ public class UserService {
         return "Ok";
     }
 
-    private UserResponse getUserResponse(User user) {
+    protected UserResponse getUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -70,6 +70,8 @@ public class UserService {
                 .phone(user.getPhone())
                 .role(user.getRole())
                 .avatarUrl(user.getAvatarUrl())
+                .uploadNumber(user.getUploadNumber())
+                .downloadNumber(user.getDownloadNumber())
                 .build();
     }
 }
