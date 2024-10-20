@@ -10,7 +10,18 @@ import classnames, {
 import { InputProps } from './types';
 
 export const Input = (props: InputProps) => {
-  const { icon, size, placeholder, type, classNames, onChange, value, disabled } = props;
+  const {
+    icon,
+    size,
+    placeholder,
+    type,
+    classNames,
+    onChange,
+    value,
+    disabled,
+    min,
+    max,
+  } = props;
 
   const styles = useStyles();
 
@@ -23,6 +34,8 @@ export const Input = (props: InputProps) => {
         onChange={onChange}
         value={value}
         disabled={disabled}
+        min={min}
+        max={max}
       />
       {icon ? <div className={classnames(styles.icon)}>{icon}</div> : null}
     </div>
