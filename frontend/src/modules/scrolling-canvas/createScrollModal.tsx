@@ -58,7 +58,6 @@ export const CreateScrollModal = () => {
       },
     }).then(async response => {
       const res = await response.json();
-      console.log(res);
       if (res.success) {
         toast.info('Create scroll successfully!');
         dispatch(createScrollSuccess(res.data));
