@@ -1,8 +1,11 @@
+import { Icon } from '@frontend/components/icon';
 import classnames, {
+  alignItems,
   backgroundColor,
   borderRadius,
   display,
   flexDirection,
+  gap,
   justifyContent,
   sizing,
   spacing,
@@ -14,9 +17,10 @@ type ScrollingCardProps = {
   title: string;
   createdBy: string;
   date: string;
+  downloadAmount: number;
 };
 export const ScrollingCard = (props: ScrollingCardProps) => {
-  const { title, createdBy, date } = props;
+  const { title, createdBy, date, downloadAmount } = props;
   const styles = useStyles();
 
   return (
@@ -31,9 +35,20 @@ export const ScrollingCard = (props: ScrollingCardProps) => {
       </div>
       <div className={classnames(styles.footer)}>
         <div>
-          by <span className={classnames(styles.createdBy)}>{createdBy}</span>
+          <div>
+            by <span className={classnames(styles.createdBy)}>{createdBy}</span>
+          </div>
         </div>
-        <div>{convertDateToString((new Date(date)), 'DD-MM-YYYY')}</div>
+        <div>
+          <div>{convertDateToString(new Date(date), 'DD-MM-YYYY')}</div>
+          <div className={classnames(styles.downloadAmountWrap)}>
+            <Icon
+              type="download"
+              classNames={classnames(styles.downloadAmountIcon)}
+            />
+            <div>{downloadAmount}</div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -58,5 +73,12 @@ const useStyles = () => {
     ),
     title: classnames(typography('text-tx18', 'font-bold')),
     createdBy: classnames(typography('font-bold')),
+    downloadAmountIcon: classnames(sizing('h-4', 'w-4')),
+    downloadAmountWrap: classnames(
+      display('flex'),
+      gap('gap-2'),
+      alignItems('items-center'),
+      justifyContent('justify-end'),
+    ),
   };
 };

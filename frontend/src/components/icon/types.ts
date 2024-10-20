@@ -3,7 +3,7 @@ import { TTailwindString } from '@frontend/tailwindcss-classnames';
 export type IconProps = {
   classNames?: TTailwindString;
   type: IconType;
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 };
 
 export type IconType =
@@ -15,4 +15,5 @@ export type IconType =
   | 'delete'
   | 'warning'
   | 'eye'
-  | 'eye-slash';
+  | 'eye-slash'
+  | 'download';

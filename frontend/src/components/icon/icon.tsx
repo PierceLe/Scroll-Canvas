@@ -10,6 +10,7 @@ import {
   WarningIcon,
   EyeIcon,
   EyeSlashIcon,
+  DownloadIcon
 } from './resources';
 
 export const Icon = (props: IconProps) => {
@@ -43,6 +44,8 @@ const getIconByType = (type: IconType) => {
       return <EyeIcon />;
     case 'eye-slash':
       return <EyeSlashIcon />;
+    case 'download':
+      return <DownloadIcon />;
     default:
       return <></>;
   }
