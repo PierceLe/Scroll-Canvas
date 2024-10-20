@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { useState, useEffect, SetStateAction, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import {
@@ -11,15 +12,14 @@ import {
   justifyContent,
   fill,
   alignItems,
+  opacity,
+  borders,
 } from '@frontend/tailwindcss-classnames';
 import { Button } from '@frontend/components/button';
 import { useAuthContext } from '../auth';
-import { ROLE_TYPE } from '@frontend/repositories';
-import { ReactPDF } from '@frontend/components/react-pdf';
 import { useReduxDispatch } from '@frontend/redux/hooks';
 import { ScrollingController } from '@frontend/handlers/scrolling';
 import { Icon } from '@frontend/components/icon';
-import { useState, useEffect, SetStateAction } from 'react';
 import { Input } from '@frontend/components/input';
 import { getCookie } from '@frontend/helpers/cookie';
 import { toast } from 'react-toastify';
@@ -34,22 +34,13 @@ type ScrollingPreview = {
   id?: number;
   title?: string;
   createdBy?: string;
-  createdByUsername?: string;
+  owner?: any;
   date?: string;
   url?: string;
 };
 
 export const ScrollingPreview = (props: ScrollingPreview) => {
-  const {
-    isShowModal,
-    onClose,
-    id,
-    title,
-    // createdBy,
-    createdByUsername,
-    // date,
-    url,
-  } = props;
+  const { isShowModal, onClose, id, title, owner, url } = props;
   const { user } = useAuthContext();
 
   const dispatch = useReduxDispatch();
@@ -57,14 +48,45 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
 
   const [editTitle, setEditTitle] = useState<string>();
   const [isEdit, setIsEdit] = useState<boolean>();
-  const [file, setFile] = useState<any>();
+  const [fileContent, setFileContent] = useState('');
+  const textareaRef = useRef<any>(null);
 
   const styles = useStyles();
 
   useEffect(() => {
+    const fetchFileContent = async () => {
+      try {
+        if (url) {
+          const response = await fetch(url);
+          if (!response.ok) {
+            console.error('Network response was not ok');
+          }
+          const text = await response.text();
+          setFileContent(text);
+        }
+      } catch (err: any) {
+        console.error(err.message);
+      }
+    };
+
+    setFileContent('');
     setEditTitle(title ?? '');
     setIsEdit(false);
+    fetchFileContent();
   }, [id]);
+
+  useEffect(() => {
+    handleResizeTextarea();
+  }, [textareaRef.current]);
+
+  const handleResizeTextarea = () => {
+    if (textareaRef?.current) {
+      // Reset height to auto to shrink the textarea if necessary
+      textareaRef.current.style.height = 'auto';
+      // Set height to scrollHeight to expand to fit content
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
 
   const handleDeleteScroll = (closeConfirmDelete: any) => {
     dispatch(
@@ -77,10 +99,6 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
     if (onClose) onClose();
   };
 
-  const handleFile = (e: any) => {
-    setFile(e.target.files[0]);
-  };
-
   const handleTitle = (e: {
     target: { value: SetStateAction<string | undefined> };
   }) => {
@@ -91,19 +109,19 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
     const formData = new FormData();
 
     // Update the formData object
-    formData.append('file', file);
+    const blob = convertFileContentToBlob();
+    formData.append('file', blob);
     formData.append('title', editTitle ?? '');
 
     // dispatch(scrollController.updateScrolling(formData));
 
-    fetch('http://localhost:8080/api/v1/scroll/upload', {
+    fetch(`${import.meta.env.VITE_SERVER_HOST}/api/v1/scroll/upload`, {
       method: 'post',
       body: formData,
       headers: {
         Authorization: 'Bearer ' + getCookie('Authentication'),
       },
     }).then(async response => {
-      console.log(response);
       const res = await response.json();
       if (res.statusCode === 200) {
         toast.info('Update scroll successfully!');
@@ -112,13 +130,27 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
     });
   };
 
+  const convertFileContentToBlob = () => {
+    const binaryData = new Uint8Array(fileContent.length);
+    for (let i = 0; i < fileContent.length; i++) {
+      binaryData[i] = fileContent.charCodeAt(i);
+    }
+
+    const blob = new Blob([binaryData], { type: 'application/octet-stream' });
+
+    return blob;
+  };
+
   const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = url ?? '';
-    link.setAttribute('download', 'yourfile.pdf'); // Specify the file name
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const blob = convertFileContentToBlob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${title}.bin`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -148,20 +180,20 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
             )}
           </div>
 
-          {isEdit ? (
-            <Input
-              size="md"
-              type="file"
-              onChange={handleFile}
-              classNames={classnames(styles.input)}
+          <div className={classnames(styles.pdfPreviewWrap)}>
+            {/* <ReactPDF url={url ?? ''} /> */}
+            <textarea
+              ref={textareaRef}
+              value={fileContent}
+              disabled={!isEdit}
+              className={classnames(styles.fileContent(fileContent))}
+              onInput={handleResizeTextarea}
+              onChange={e => setFileContent(e.target.value)}
             />
-          ) : (
-            <div className={classnames(styles.pdfPreviewWrap)}>
-              <ReactPDF url={url ?? ''} />
-            </div>
-          )}
+          </div>
 
           <div className={`actions ${classnames(styles.action)}`}>
+            {/** Save change */}
             {isEdit && (
               <Button
                 variant="contained"
@@ -172,6 +204,7 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
                 Save
               </Button>
             )}
+            {/** Cancel change */}
             {isEdit ? (
               <Button
                 variant="contained"
@@ -182,20 +215,28 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
                 Cancel
               </Button>
             ) : (
-              <Button
-                variant="contained"
-                size="md"
-                color="success"
-                onClick={() => setIsEdit(true)}
-              >
-                Edit
-              </Button>
+              <>
+                {/** Edit scroll */}
+                {user?.isAdmin() || user?.id === owner?.id ? (
+                  <Button
+                    variant="contained"
+                    size="md"
+                    color="success"
+                    onClick={() => setIsEdit(true)}
+                  >
+                    Edit
+                  </Button>
+                ) : null}
+              </>
             )}
-            <Button variant="contained" size="md" onClick={handleDownload}>
-              Download
-            </Button>
-            {(user?.role === ROLE_TYPE.ADMIN ||
-              user?.username === createdByUsername) && (
+            {/** Download file */}
+            {user?.isAdmin() || user?.id === owner?.id ? (
+              <Button variant="contained" size="md" onClick={handleDownload}>
+                Download
+              </Button>
+            ) : null}
+            {/** Delete scroll */}
+            {(user?.isAdmin() || user?.id === owner?.id) && (
               <Popup
                 key="confirmDeleteModal"
                 modal={true}
@@ -286,5 +327,12 @@ const useStyles = () => {
       justifyContent('justify-center'),
       gap('gap-2'),
     ),
+    fileContent: (fileContent: string) =>
+      classnames(
+        sizing('w-full', 'max-h-48'),
+        !fileContent ? opacity('opacity-0') : null,
+        borders('border-2', 'rounded-xl'),
+        spacing('p-2')
+      ),
   };
 };

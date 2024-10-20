@@ -22,7 +22,7 @@ export const ScrollingCanvas = () => {
   const [isShowPreview, setIsShowPreview] = useState<boolean>(false);
   const [id, setId] = useState<number>();
   const [title, setTitle] = useState<string>();
-  const [createdBy, setCreatedBy] = useState<string>();
+  const [owner, setOwner] = useState<string>();
   const [date, setDate] = useState<string>();
   const [url, setUrl] = useState<string>();
   const styles = useStyles();
@@ -34,9 +34,10 @@ export const ScrollingCanvas = () => {
 
   const handleShowPreview = (scrolling: any) => {
     const { fileId, title, owner, uploadDate, filePath } = scrolling;
+  
     setId(fileId);
     setTitle(title);
-    setCreatedBy(owner?.firstName);
+    setOwner(owner);
     setDate(uploadDate);
     setUrl(filePath)
     setIsShowPreview(true);
@@ -64,12 +65,13 @@ export const ScrollingCanvas = () => {
           );
         })}
       </div>
+
       <ScrollingPreview
         isShowModal={isShowPreview}
         onClose={() => setIsShowPreview(false)}
         id={id}
         title={title}
-        createdBy={createdBy}
+        owner={owner}
         url={url}
         date={date}
       />
