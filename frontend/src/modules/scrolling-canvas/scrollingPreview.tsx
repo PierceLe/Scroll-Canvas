@@ -37,10 +37,11 @@ type ScrollingPreview = {
   owner?: any;
   date?: string;
   url?: string;
+  timeout?: number;
 };
 
 export const ScrollingPreview = (props: ScrollingPreview) => {
-  const { isShowModal, onClose, id, title, owner, url } = props;
+  const { isShowModal, onClose, id, title, owner, url, timeout } = props;
   const { user } = useAuthContext();
 
   const dispatch = useReduxDispatch();
@@ -73,7 +74,17 @@ export const ScrollingPreview = (props: ScrollingPreview) => {
     setEditTitle(title ?? '');
     setIsEdit(false);
     fetchFileContent();
-  }, [id]);
+
+    if (timeout && onClose) {
+      // Set timeout to close modal preview
+      const timer = setTimeout(() => {
+        onClose();
+      }, timeout);
+
+      // Cleanup function to clear the timeout
+      return () => clearTimeout(timer);
+    }
+  }, [id, isShowModal]);
 
   useEffect(() => {
     handleResizeTextarea();
@@ -332,7 +343,7 @@ const useStyles = () => {
         sizing('w-full', 'max-h-48'),
         !fileContent ? opacity('opacity-0') : null,
         borders('border-2', 'rounded-xl'),
-        spacing('p-2')
+        spacing('p-2'),
       ),
   };
 };

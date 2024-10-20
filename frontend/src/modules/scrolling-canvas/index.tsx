@@ -25,6 +25,7 @@ export const ScrollingCanvas = () => {
   const [owner, setOwner] = useState<string>();
   const [date, setDate] = useState<string>();
   const [url, setUrl] = useState<string>();
+  const [timeout, setTimeout] = useState<number>();
   const styles = useStyles();
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export const ScrollingCanvas = () => {
     setDate(uploadDate);
     setUrl(filePath)
     setIsShowPreview(true);
+    setTimeout(5000)
   };
 
   return (
@@ -75,6 +77,7 @@ export const ScrollingCanvas = () => {
         owner={owner}
         url={url}
         date={date}
+        timeout={timeout}
       />
     </div>
   );

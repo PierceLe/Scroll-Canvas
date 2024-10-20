@@ -11,6 +11,8 @@ import {
   spacing,
   display,
   justifyContent,
+  gap,
+  alignItems,
 } from '@frontend/tailwindcss-classnames';
 import { Button } from '@frontend/components/button';
 import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
@@ -28,6 +30,8 @@ export const CreateScrollModal = () => {
 
   const [title, setTitle] = useState<string>();
   const [file, setFile] = useState<any>();
+  const [timeoutMinute, setTimeoutMinute] = useState<number>(0);
+  const [timeoutSecond, setTimeoutSecond] = useState<number>(0);
 
   const styles = useStyles();
 
@@ -38,6 +42,12 @@ export const CreateScrollModal = () => {
       case 'title':
         setTitle(value);
         break;
+      case 'timeoutMinute':
+        setTimeoutMinute(Number(value));
+        break;
+      case 'timeoutSecond':
+        setTimeoutSecond(Number(value));
+        break;
     }
   };
 
@@ -46,11 +56,20 @@ export const CreateScrollModal = () => {
   };
 
   const handleCreateScroll = async (closeModal: any) => {
+    if (timeoutMinute < 0 || timeoutSecond < 0) {
+      toast.warn('The timeout must be positive')
+    }
+    if (timeoutSecond >= 60) {
+      toast.warn('The timeout seconds must not be greater than or equal to 60')
+    } 
+
     const formData = new FormData();
+    const timeout = timeoutMinute * 60 + timeoutSecond;
 
     // Update the formData object
     formData.append('file', file);
     formData.append('title', title ?? '');
+    formData.append('timeout', timeout.toString());
 
     dispatch(createScrollPending());
 
@@ -99,6 +118,32 @@ export const CreateScrollModal = () => {
                 />
               </div>
               <div className={classnames(styles.inputWrap)}>
+                <div className={classnames(styles.inputLabel)}>
+                  Preview timout
+                </div>
+                <div className={classnames(styles.timeoutInputWrap)}>
+                  <Input
+                    size="md"
+                    onChange={handleInput('timeoutMinute')}
+                    type="number"
+                    min={0}
+                    classNames={classnames(styles.inputTimeout)}
+                    value={timeoutMinute}
+                  />
+                  m<div>:</div>
+                  <Input
+                    size="md"
+                    onChange={handleInput('timeoutSecond')}
+                    classNames={classnames(styles.inputTimeout)}
+                    type="number"
+                    min={0}
+                    max={59}
+                    value={timeoutSecond}
+                  />
+                  s
+                </div>
+              </div>
+              <div className={classnames(styles.inputWrap)}>
                 <div className={classnames(styles.inputLabel)}>File</div>
                 <Input
                   size="md"
@@ -138,5 +183,11 @@ const useStyles = () => {
     ),
     action: classnames(display('flex'), justifyContent('justify-center')),
     icon: classnames(sizing('w-5', 'h-5')),
+    timeoutInputWrap: classnames(
+      display('flex'),
+      gap('gap-2'),
+      alignItems('items-center'),
+    ),
+    inputTimeout: classnames(sizing('w-16')),
   };
 };

@@ -9,4 +9,6 @@ export type InputProps = {
   value?: string | number | readonly string[] | undefined
   icon?: any
   disabled?: boolean
+  min?: number
+  max?: number
 };
