@@ -7,3 +7,4 @@ export * from './delete';
 export * from './warning';
 export * from './eye';
 export * from './eyeSlash';
+export * from './download'

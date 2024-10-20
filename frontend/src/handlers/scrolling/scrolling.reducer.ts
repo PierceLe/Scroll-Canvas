@@ -50,9 +50,8 @@ export const scrollSlice = createSlice({
     // DeleteScrollAPI
     builder.addCase(
       scrollingController.deleteScrolling.fulfilled,
-      (state, action) => {
+      (state) => {
         toast.info('Delete scroll successfully!');
-        console.log(action.payload);
         return {
           ...state,
         };

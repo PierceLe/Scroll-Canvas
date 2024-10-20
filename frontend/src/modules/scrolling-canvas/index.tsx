@@ -60,6 +60,7 @@ export const ScrollingCanvas = () => {
                 title={scroll.title}
                 createdBy={scroll.owner?.firstName}
                 date={scroll.uploadDate}
+                downloadAmount={scroll.downloadAmount}
               />
             </div>
           );
