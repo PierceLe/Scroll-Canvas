@@ -108,6 +108,10 @@ export const Login = () => {
     navigate(PAGE_LINKS.REGISTER.path);
   };
 
+  const handleLoginAsGuest = () => {
+    navigate(PAGE_LINKS.HOME.path);
+  }
+
   return (
     <div className={classnames(styles.root)}>
       <div className={classnames(styles.leftSide)}>
@@ -157,6 +161,14 @@ export const Login = () => {
               disabled={isReachableMaxAttempts}
             >
               Login
+            </Button>
+            <Button
+              variant="contained"
+              size="md"
+              classNames={classnames(styles.buttonLogin)}
+              onClick={handleLoginAsGuest}
+            >
+              Login as guest
             </Button>
             <Button
               variant="outlined"
