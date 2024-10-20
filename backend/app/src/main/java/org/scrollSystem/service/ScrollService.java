@@ -1,5 +1,6 @@
 package org.scrollSystem.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.scrollSystem.exception.ValidationException;
 import org.scrollSystem.models.FileStorage;
@@ -23,8 +24,10 @@ import java.util.Optional;
 public class ScrollService {
     private final FileStorageRepository fileRepository;
     private final S3Service s3Service;
+    private final UserService userService;
     private final UserRepository userRepository;
 
+    @Transactional
     public FileResponse uploadFile(MultipartFile file, String title) throws IOException {
         Optional<FileStorage> optionalFileStorage = fileRepository.getFileStorageByTitle(title);
 
@@ -45,6 +48,9 @@ public class ScrollService {
                 .build();
         fileRepository.save(fileStorage);
 
+        owner.setUploadNumber(owner.getUploadNumber() + 1);
+        userRepository.save(owner);
+
         FileResponse response = FileResponse.builder()
                 .fileId(fileStorage.getFileId())
                 .title(fileStorage.getTitle())
@@ -55,15 +61,7 @@ public class ScrollService {
                 .downloadAmount(fileStorage.getDownloadAmount())
                 .build();
 
-        UserResponse ownerResponse = UserResponse.builder()
-                .id(owner.getId())
-                .firstName(owner.getFirstName())
-                .lastName(owner.getLastName())
-                .email(owner.getEmail())
-                .username(owner.getUsername())
-                .phone(owner.getPhone())
-                .role(owner.getRole())
-                .build();
+        UserResponse ownerResponse = userService.getUserResponse(owner);
 
         response.setOwner(ownerResponse);
 
@@ -163,4 +161,17 @@ public class ScrollService {
     }
 
 
+    public String download(Integer id) {
+        Optional<FileStorage> file = fileRepository.getFileStorageByFileId(id);
+
+        if (file.isEmpty()) {
+            throw new ValidationException("File id " + id + " is not exist");
+        }
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        user.setDownloadNumber(user.getDownloadNumber() + 1);
+        userRepository.save(user);
+
+        return file.get().getFilePath();
+    }
 }

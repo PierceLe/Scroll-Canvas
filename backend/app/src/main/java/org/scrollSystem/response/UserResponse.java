@@ -14,4 +14,6 @@ public class UserResponse {
     private String role;
     private String phone;
     private String avatarUrl;
+    private Integer uploadNumber;
+    private Integer downloadNumber;
 }

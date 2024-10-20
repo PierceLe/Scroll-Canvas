@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 
 @Data
@@ -30,7 +31,25 @@ public class User implements UserDetails {
     private String password;
     private String phone;
     private String avatarUrl;
+    @Column(name = "upload_number")
+    @Builder.Default
+    private Integer uploadNumber = 0;
+    @Column(name = "download_number")
+    @Builder.Default
+    private Integer downloadNumber = 0;
     private String salt;
+
+    public Integer getUploadNumber() {
+        if (Objects.isNull(uploadNumber)) return 0;
+
+        return uploadNumber;
+    }
+
+    public Integer getDownloadNumber() {
+        if (Objects.isNull(downloadNumber)) return 0;
+
+        return downloadNumber;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

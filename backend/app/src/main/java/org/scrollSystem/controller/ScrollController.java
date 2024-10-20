@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/v1/scroll")
 @RequiredArgsConstructor
 public class ScrollController {
-    private final ScrollService ScrollService;
+    private final ScrollService scrollService;
 
     // API for upload the file into AWS S3
     @PostMapping({"/upload"})
@@ -26,10 +26,10 @@ public class ScrollController {
             @RequestParam("title") String title
     ) throws IOException {
         try {
-            FileResponse fileResponse = ScrollService.uploadFile(file, title);
+            FileResponse fileResponse = scrollService.uploadFile(file, title);
             return DefaultResponse.success(fileResponse);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             return DefaultResponse.error("Failed to upload file");
         }
     }
@@ -38,7 +38,7 @@ public class ScrollController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<DefaultResponse<Integer>> deleteFile(@PathVariable Integer id) {
         try {
-            Integer id_deleted = ScrollService.deleteFile(id);
+            Integer id_deleted = scrollService.deleteFile(id);
             return DefaultResponse.success("File deleted successfully", id_deleted);
         } catch (Exception e) {
             return DefaultResponse.error("Error deleting file: " + e.getMessage());
@@ -54,13 +54,17 @@ public class ScrollController {
                                                                                @RequestParam("From") @Nullable Timestamp fromDate,
                                                                                @RequestParam("To") @Nullable Timestamp toDate) throws ValidationException {
 //        System.out.println(fromDate + " " + toDate);
-        return DefaultResponse.success(ScrollService.getSearchFilter(title, fileType, ownerUsername,fileId, fromDate, toDate));
+        return DefaultResponse.success(scrollService.getSearchFilter(title, fileType, ownerUsername,fileId, fromDate, toDate));
     }
 
 //    @GetMapping("")
 //    public ResponseEntity<DefaultListResponse<FileResponse>> getScrolls(
 //    ) {
-//        return DefaultListResponse.success(ScrollService.getScrolls());
+//        return DefaultListResponse.success(scrollService.getScrolls());
 //    }
 
+    @GetMapping("/download/{id}")
+    public ResponseEntity<DefaultResponse<String>> download(@PathVariable Integer id) {
+        return DefaultResponse.success(scrollService.download(id));
+    }
 }
