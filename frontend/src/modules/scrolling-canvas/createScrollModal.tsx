@@ -13,15 +13,19 @@ import {
   justifyContent,
 } from '@frontend/tailwindcss-classnames';
 import { Button } from '@frontend/components/button';
-import { useReduxDispatch } from '@frontend/redux/hooks';
+import { useReduxDispatch, useReduxSelector } from '@frontend/redux/hooks';
 import { toast } from 'react-toastify';
 // import { ScrollingController } from '@frontend/handlers/scrolling';
 import { getCookie } from '@frontend/helpers/cookie';
-import { createScrollSuccess } from '@frontend/handlers/scrolling';
+import {
+  createScrollPending,
+  createScrollSuccess,
+} from '@frontend/handlers/scrolling';
 
 export const CreateScrollModal = () => {
   const dispatch = useReduxDispatch();
-  // const scrollController = ScrollingController.getInstance();
+  const { scrollState } = useReduxSelector(['scrollState']);
+
   const [title, setTitle] = useState<string>();
   const [file, setFile] = useState<any>();
 
@@ -48,7 +52,7 @@ export const CreateScrollModal = () => {
     formData.append('file', file);
     formData.append('title', title ?? '');
 
-    // dispatch(scrollController.updateScrolling(formData));
+    dispatch(createScrollPending());
 
     fetch(`${import.meta.env.VITE_SERVER_HOST}/api/v1/scroll/upload`, {
       method: 'post',
@@ -61,7 +65,7 @@ export const CreateScrollModal = () => {
       if (res.success) {
         toast.info('Create scroll successfully!');
         dispatch(createScrollSuccess(res.data));
-        closeModal()
+        closeModal();
       }
     });
   };
@@ -110,6 +114,7 @@ export const CreateScrollModal = () => {
                 size="md"
                 color="success"
                 onClick={() => handleCreateScroll(close)}
+                disabled={scrollState.isCreateScrollPending}
               >
                 Create scroll
               </Button>

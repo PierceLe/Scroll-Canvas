@@ -12,10 +12,16 @@ export const scrollSlice = createSlice({
   name: 'userSlice',
   initialState,
   reducers: {
-    createScrollSuccess: (state, action) => {
-      console.log(action);
+    createScrollPending: state => {
       return {
         ...state,
+        isCreateScrollPending: true,
+      };
+    },
+    createScrollSuccess: (state, action) => {
+      return {
+        ...state,
+        isCreateScrollPending: false,
         scrollings: [action.payload, ...state.scrollings],
       };
     },
@@ -66,5 +72,5 @@ export const scrollSlice = createSlice({
 });
 
 // eslint-disable-next-line no-empty-pattern
-export const { createScrollSuccess } = scrollSlice.actions;
+export const { createScrollSuccess, createScrollPending } = scrollSlice.actions;
 export const { reducer: scrollReducer } = scrollSlice;
