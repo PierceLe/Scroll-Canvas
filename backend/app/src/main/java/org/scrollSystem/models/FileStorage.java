@@ -40,6 +40,8 @@ public class FileStorage {
     @Column(nullable = false)
     private Integer downloadAmount;
 
+    private Integer viewTime;
+
     @PrePersist
     protected void onCreate() {
         uploadDate = new Timestamp(System.currentTimeMillis());

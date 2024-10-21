@@ -7,6 +7,7 @@ import org.scrollSystem.models.FileStorage;
 import org.scrollSystem.models.User;
 import org.scrollSystem.repository.FileStorageRepository;
 import org.scrollSystem.repository.UserRepository;
+import org.scrollSystem.request.FileRequest;
 import org.scrollSystem.response.FileResponse;
 import org.scrollSystem.response.UserResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -160,7 +161,7 @@ public class ScrollService {
         return response;
     }
 
-
+    @Transactional
     public String download(Integer id) {
         Optional<FileStorage> file = fileRepository.getFileStorageByFileId(id);
 
@@ -168,10 +169,18 @@ public class ScrollService {
             throw new ValidationException("File id " + id + " is not exist");
         }
 
+        FileStorage scroll = file.get();
+        scroll.setDownloadAmount(scroll.getDownloadAmount() + 1);
+        fileRepository.save(scroll);
+
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         user.setDownloadNumber(user.getDownloadNumber() + 1);
         userRepository.save(user);
 
         return file.get().getFilePath();
+    }
+
+    public FileResponse update(FileRequest request) {
+        return null;
     }
 }

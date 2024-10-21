@@ -77,4 +77,9 @@ public class User implements UserDetails {
         return UserDetails.super.isEnabled();
     }
 
+    @PrePersist
+    protected void onCreate() {
+        uploadNumber = 0;
+        downloadNumber = 0;
+    }
 }

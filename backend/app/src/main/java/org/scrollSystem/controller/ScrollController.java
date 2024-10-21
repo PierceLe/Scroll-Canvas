@@ -2,6 +2,7 @@ package org.scrollSystem.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.scrollSystem.exception.ValidationException;
+import org.scrollSystem.request.FileRequest;
 import org.scrollSystem.response.*;
 import org.scrollSystem.service.ScrollService;
 import org.springframework.http.ResponseEntity;
@@ -66,5 +67,10 @@ public class ScrollController {
     @GetMapping("/download/{id}")
     public ResponseEntity<DefaultResponse<String>> download(@PathVariable Integer id) {
         return DefaultResponse.success(scrollService.download(id));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<DefaultResponse<FileResponse>> update(@RequestBody FileRequest request) {
+        return DefaultResponse.success(scrollService.update(request));
     }
 }
